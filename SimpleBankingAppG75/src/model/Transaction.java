@@ -39,6 +39,13 @@ public class Transaction {
     }
 
 
+    @Override
+    public String toString() {
+        return String.format(
+                "%-10s| %-30s| %-10s",
+                account_number, transaction_amount, transaction_date    
+        );
+    }
     
     
 }

@@ -1,5 +1,7 @@
 package model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Account {
@@ -7,6 +9,7 @@ public class Account {
     private String username_of_account_holder;
     private String account_type;
     private Date account_opening_date;
+    private final static  DateFormat ACCOUNT_OPENING_DATE_FORMAT = new SimpleDateFormat("(MMM dd, yyyy)");
 
 public String getAccountNumber() {
     return account_number;
@@ -39,10 +42,16 @@ public Account(String account_number, String username_of_account_holder, String 
     this.username_of_account_holder = username_of_account_holder;
     this.account_type = account_type;
     this.account_opening_date = account_opening_date;
+  
 }
 
+@Override()
 public String toString() {
-	return account_number + "," + username_of_account_holder + "," + account_type + "," + account_opening_date;
+     
+	return String.format(
+            "%-10s| %-30s| %-10s| %-10s ",
+            account_number, username_of_account_holder, account_type, ACCOUNT_OPENING_DATE_FORMAT.format(account_opening_date)
+    );
 }
 
 

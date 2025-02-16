@@ -73,7 +73,7 @@ public class SimpleBankingApp {
 		System.out.println("--------------------------------------------------------------------------------");
 		
 		for  (int i = 0; i < accounts.size(); i++) 
-            System.out.println(accounts.get(i).toString() + "| $" + getBalance(accounts.get(i).getAccount_number()));
+            System.out.println(accounts.get(i).toString() + "| $" + getBalance(accounts.get(i).getAccountNumber()));
 		
 		System.out.println();
 	}
@@ -92,8 +92,13 @@ public class SimpleBankingApp {
 	 * @return A double value, being the balance of the account
 	 */
 	public static double getBalance(String account_number) {
-		return 0;
-		// TODO
+		double balance = 0.0;
+		for (int i = 0; i < transactions.size(); i++) {
+			if (transactions.get(i).getAccountNumber().equals(account_number)) {
+				balance += transactions.get(i).getTransactionAmount();
+			}
+		}
+		return balance;
 		
 	}
 	

@@ -12,10 +12,10 @@ public class User {
 	// Constructor
 	public User(String username, String password, String first_name, String last_name, String mobile_number) {
 		this.username = username;
-		// this.password = password; Intentional defect injected
+		this.password = password;
 		this.first_name = first_name;
-		this.last_name = first_name; // Intentional defect injected
-		this.mobile_number = "+91" + mobile_number; // Intentional defect injected
+		this.last_name = last_name; // Intentional defect injected
+		this.mobile_number = mobile_number; // Intentional defect injected
 
 	}
 
@@ -59,5 +59,11 @@ public class User {
 
 	public void setMobileNumber(String mobile_number) {
 		this.mobile_number = mobile_number;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("%-25s| %-15s| %-15s| %-15s| %-15s", username, password, first_name, last_name,
+				mobile_number);
 	}
 }
