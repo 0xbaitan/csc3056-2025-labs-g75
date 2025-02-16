@@ -1,14 +1,12 @@
 package tests;
 
-import utils.TestUtils;
-
 import java.util.Date;
-
 import model.Transaction;
+import utils.TestUtils;
 
 public class TransactionTest {
 	
-public static void testAccountConstructor() {
+public static void testTransactionConstructor() {
 		
 		String test_account_number = "303435";
 		double test_transaction_amount = 40.00;
@@ -44,6 +42,6 @@ public static void testAccountConstructor() {
 
 } 
 public static void main(String args[]) {
-	testAccountConstructor();
+	testTransactionConstructor();
 }
 }
