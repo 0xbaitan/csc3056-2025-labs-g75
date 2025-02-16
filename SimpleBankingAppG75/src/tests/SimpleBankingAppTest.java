@@ -1,6 +1,10 @@
 package tests;
 
+import java.util.Vector;
+
 import app.SimpleBankingApp;
+import controller.UserController;
+import model.User;
 import utils.TestUtils;
 
 public class SimpleBankingAppTest {
@@ -18,14 +22,15 @@ public class SimpleBankingAppTest {
 		// 1-Setup phase: none
 		
 		// 2-Exercise phase
-		SimpleBankingApp.loadUserData();
+		Vector<User> users = UserController.loadUserData();
+		final String TEST_LOAD_USER_DATA_CASE_ID = "TC1: testLoadData -> loadUserData";
 
 		// 3-Verify phase
 		// we see in the load function of the UUT that we have loaded 3 users, so let's verify that
-		if (SimpleBankingApp.users.size() == 3)
-			System.out.println(TestUtils.TEXT_COLOR_GREEN + "testLoadData: loadUserData: TC1 passed" + TestUtils.TEXT_COLOR_RESET);
+		if (users.size() == 3)
+			TestUtils.printTestPassed(TEST_LOAD_USER_DATA_CASE_ID);
 		else
-			System.out.println(TestUtils.TEXT_COLOR_RED + "testLoadData: loadUserData: TC1 FAILED" + TestUtils.TEXT_COLOR_RESET);
+			TestUtils.printTestFailed(TEST_LOAD_USER_DATA_CASE_ID);
 
 		// The above only verification is basic (simple, weak) 
 		// To do STRONGER verification, we would need more assertions for user names and account balances, etc.

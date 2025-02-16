@@ -6,29 +6,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
 
+import controller.UserController;
 import model.Account;
 import model.Transaction;
 import model.User;
 
-public class SimpleBankingApp {
+public class SimpleBankingAppSOLVED {
 	public static Vector<User> users = new Vector<User>();
 	public static Vector<Account> accounts  = new Vector<Account>();
 	public static Vector<Transaction> transactions =  new Vector<Transaction>();
-	
-	public static void loadUserData() {
-		// structure of each record: username (email address), password, first_name, last_name, mobile_number
-		
-		// in the ideal case (real deployment of the app), we will read from file or database, but let's hard-code for now
-		User aUser = new User("mike", "my_passwd", "Mike", "Smith", "07771234567");
-		users.add(aUser);
-		
-		aUser = new User("james.cameron@gmail.com", "angel", "James", "Cameron",  "07777654321");
-		users.add(aUser);
-		
-		aUser = new User("julia.roberts@gmail.com", "change_me",   "Julia", "roberts",   "07770123456");
-		users.add(aUser); 
-		
-	}
 	
 	public static void printAllUsers() {
 		System.out.println("There are: " + users.size() + " users in the system.");	
@@ -39,6 +25,7 @@ public class SimpleBankingApp {
             System.out.println(users.get(i).toString());	
 		System.out.println();
 	}
+	
 	
 	public static void loadAccountData()  {
 		// structure of each record: 
@@ -106,7 +93,7 @@ public class SimpleBankingApp {
 	//////////////////////////////////////////////////////
 	public static void main(String[] args) {
 		
-		loadUserData();
+		users = UserController.loadUserData();
 		// let's print them all to see if they have been loaded (populated) properly
 		printAllUsers();
 		
@@ -134,4 +121,3 @@ public class SimpleBankingApp {
 	}
 
 }
-
