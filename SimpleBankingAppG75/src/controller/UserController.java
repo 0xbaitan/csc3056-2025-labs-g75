@@ -1,14 +1,37 @@
 package controller;
 
-import app.SimpleBankingApp;
-import model.User;
 import java.util.Vector;
 
-public class UserController {
 
-	public static Vector<User> loadUserData() {
+import model.User;
+
+public class UserController {
+	
+	private static volatile UserController instance;
+	
+	private final Vector<User> users;
+	
+	private UserController() {
+		users = new Vector<User>();
+		loadUserData();
+	}
+	
+	public static UserController getInstance() {
+		UserController local = UserController.instance;
+		if(local == null) {
+			synchronized (UserController.class) {
+				if(local == null) {
+				UserController.instance = local = new UserController();
+				}
+			}
+		}
+		
+		return local;
+	}
+
+	private void loadUserData() {
 		// structure of each record: username (email address), password, first_name, last_name, mobile_number
-		Vector<User> users = new Vector<User>();
+		
 		// in the ideal case (real deployment of the app), we will read from file or database, but let's hard-code for now
 		User aUser = new User("mike", "my_passwd", "Mike", "Smith", "07771234567");
 		users.add(aUser);
@@ -18,9 +41,21 @@ public class UserController {
 		
 		aUser = new User("julia.roberts@gmail.com", "change_me",   "Julia", "roberts",   "07770123456");
 		users.add(aUser); 
-		
+	}
+	
+	public Vector<User> getUsers() {
 		return users;
-		
+	}
+
+	public void printAllUsers() {
+		System.out.println("There are: " + users.size() + " users in the system.");	
+		System.out.println(String.format("%-25s| %-15s| %-15s| %-15s| %-15s", 
+				"username", "password", "first_name", "last_name", "mobile_number"));
+		System.out.println("-------------------------------------------------------------------------------------------");
+		for  (int i = 0; i < users.size(); i++) {
+	        System.out.println(users.get(i).toString());	
+		}
+		System.out.println();
 	}
 
 }

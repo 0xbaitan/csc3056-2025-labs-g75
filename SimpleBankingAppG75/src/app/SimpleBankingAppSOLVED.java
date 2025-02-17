@@ -3,95 +3,44 @@ package app;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Vector;
 
 import controller.UserController;
 import controller.AccountController;
+import controller.TransactionController;
 import model.Account;
 import model.Transaction;
 import model.User;
 
 public class SimpleBankingAppSOLVED {
-	public static Vector<User> users = new Vector<User>();
-	public static Vector<Account> accounts  = new Vector<Account>();
-	public static Vector<Transaction> transactions =  new Vector<Transaction>();
-	
-	public static void printAllUsers() {
-		System.out.println("There are: " + users.size() + " users in the system.");	
-		System.out.println(String.format("%-25s| %-15s| %-15s| %-15s| %-15s", 
-				"username", "password", "first_name", "last_name", "mobile_number"));
-		System.out.println("-------------------------------------------------------------------------------------------");
-		for  (int i = 0; i < users.size(); i++) 
-            System.out.println(users.get(i).toString());	
-		System.out.println();
-	}
-	
-	public static void printAllAccounts() {
-		System.out.println("There are: " + accounts.size() + " accounts in the system.");
-		//System.out.println("Account_number | username_of_account_holder | account_type | account_opening_date");
 
-		System.out.println(String.format("%-10s| %-30s| %-10s| %-15s| %-15s", 
-				"Account #", "username_of_account_holder", "type", "opening_date", "Balance"));
-		System.out.println("--------------------------------------------------------------------------------");
-		
-		for  (int i = 0; i < accounts.size(); i++) 
-            System.out.println(accounts.get(i).toString() + "| $" + getBalance(accounts.get(i).getAccountNumber()));
-		
-		System.out.println();
-	}
-	
-	public static void addTransaction(String account_number, double amount) { 
-		Transaction aTransaction =  new Transaction(account_number, amount, Calendar.getInstance().getTime());
-		transactions.add(aTransaction);
-	}
-	
-	/**
-	 * Calculate the balance of a given account (by its number). To do that, it needs to go over all transactions
-	 * that match the account and get their sum total. For example, if an account has only two transactions in the 
-	 * system, with values = $10.79 and $-140, the balance would be $-129.21
-	 * 
-	 * @param account_number
-	 * @return A double value, being the balance of the account
-	 */
-	public static double getBalance(String account_number) {
-		double balance = 0.0;
-		for (int i = 0; i < transactions.size(); i++) {
-			if (transactions.get(i).getAccountNumber().equals(account_number)) {
-				balance += transactions.get(i).getTransactionAmount();
-			}
-		}
-		return balance;
-		
-	}
-	
-	
-	//////////////////////////////////////////////////////
+
 	public static void main(String[] args) {
 		
-		users = UserController.loadUserData();
-		// let's print them all to see if they have been loaded (populated) properly
-		printAllUsers();
+		UserController userController = UserController.getInstance();
+		AccountController accountController = AccountController.getInstance();
+		TransactionController transactionController = TransactionController.getInstance();
 		
-		accounts = AccountController.loadAccountData();
 		// let's print them all to see if they have been loaded (populated) properly
+		userController.printAllUsers();
+		
 		System.out.println("Accounts: initial state, after loading...");
-		printAllAccounts();
+		accountController.printAllAccounts();
 		
 		// let's do some activities on the populated accounts, add transactions, etc.
 		// Deposit: adding a transaction with a positive value
 		// Withdraw: adding a transaction with a negative value
-		addTransaction("5495-1234", -50.21);
+		transactionController.addTransaction("5495-1234", -50.21);
 		System.out.println("Account: after the 1st addTransaction function call...");
-		printAllAccounts();
+		accountController.printAllAccounts();
 		
 		// and some more activities on the accounts
-		addTransaction("5495-1234", 520.00);
-		addTransaction("9999-1111", 21.00); // it seems this account does not exist in the loaded (populated) data, 
+		transactionController.addTransaction("5495-1234", 520.00);
+		transactionController.addTransaction("9999-1111", 21.00); // it seems this account does not exist in the loaded (populated) data, 
 											// but the addTransaction does not do that check, need to improve that function in future
 		// let's print the accounts and their balance to see if the above transaction have impacted their balances
 		System.out.println("Account: after the 2nd/3rd addTransaction function calls...");
-		printAllAccounts();
+		accountController.printAllAccounts();
 		
 
 	}

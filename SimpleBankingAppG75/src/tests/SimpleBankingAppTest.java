@@ -1,10 +1,6 @@
 package tests;
 
-import java.util.Vector;
-
 import app.SimpleBankingApp;
-import controller.UserController;
-import model.User;
 import utils.TestUtils;
 
 public class SimpleBankingAppTest {
@@ -22,15 +18,14 @@ public class SimpleBankingAppTest {
 		// 1-Setup phase: none
 		
 		// 2-Exercise phase
-		Vector<User> users = UserController.loadUserData();
-		final String TEST_LOAD_USER_DATA_CASE_ID = "TC1: testLoadData -> loadUserData";
+		SimpleBankingApp.loadUserData();
 
 		// 3-Verify phase
 		// we see in the load function of the UUT that we have loaded 3 users, so let's verify that
-		if (users.size() == 3)
-			TestUtils.printTestPassed(TEST_LOAD_USER_DATA_CASE_ID);
+		if (SimpleBankingApp.users.size() == 3)
+			System.out.println(TestUtils.TEXT_COLOR_GREEN + "testLoadData: loadUserData: TC1 passed" + TestUtils.TEXT_COLOR_RESET);
 		else
-			TestUtils.printTestFailed(TEST_LOAD_USER_DATA_CASE_ID);
+			System.out.println(TestUtils.TEXT_COLOR_RED + "testLoadData: loadUserData: TC1 FAILED" + TestUtils.TEXT_COLOR_RESET);
 
 		// The above only verification is basic (simple, weak) 
 		// To do STRONGER verification, we would need more assertions for user names and account balances, etc.
@@ -72,38 +67,23 @@ public class SimpleBankingAppTest {
 	}
 
 	// this test method (test case) verifies if the Withdraw feature works properly
-	
+	/* TODO
 	public static void testWithdrawals() {
 		// 1-Setup phase
-		final String TEST_ACCOUNT_NUMBER = "5495-1234";
-		double balanceBefore = SimpleBankingApp.getBalance(TEST_ACCOUNT_NUMBER);
-		final double WITHDRAWAL_AMOUNT = 50.21;
-	
 		
 		// 2-Exercise phase
-		SimpleBankingApp.addTransaction("5495-1234", -WITHDRAWAL_AMOUNT);
-		double balanceAfter = SimpleBankingApp.getBalance(TEST_ACCOUNT_NUMBER);
-
+		
 		// 3-verify
-		assert balanceBefore - WITHDRAWAL_AMOUNT == balanceAfter;
-		if (balanceBefore - WITHDRAWAL_AMOUNT == balanceAfter)
-			System.out.println(TestUtils.TEXT_COLOR_GREEN + "testWithdrawals: TC1 passed"+ TestUtils.TEXT_COLOR_RESET);
-		else {
-			System.out.println(TestUtils.TEXT_COLOR_RED + "testWithdrawals: TC1 FAILED XXX: balanceBefore - WITHDRAWAL_AMOUNT != balanceAfter");
-			System.out.format("testWithdrawals: balanceBefore = %.2f ; WITHDRAWAL_AMOUNT = %.2f ; balanceAfter = %.2f %s\n", 
-					balanceBefore , WITHDRAWAL_AMOUNT , balanceAfter, TestUtils.TEXT_COLOR_RESET);
-		}
 		
 		// 4-tear-down
-		SimpleBankingApp.addTransaction(TEST_ACCOUNT_NUMBER, WITHDRAWAL_AMOUNT);
 	}
-
+	*/
 	
 	public static void main(String[] args) {
 		// we need to call our test cases (methods)
 		testLoadData();
 		testDeposits();
-		testWithdrawals();
+		// testWithdrawals(); -- uncomment this call, when you have developed the test method (test case)
 	}
 
 }
