@@ -1,16 +1,9 @@
 package app;
 
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Vector;
-
-import controller.UserController;
 import controller.AccountController;
 import controller.TransactionController;
-import model.Account;
-import model.Transaction;
-import model.User;
+import controller.UserController;
 
 public class SimpleBankingAppSOLVED {
 
@@ -30,13 +23,13 @@ public class SimpleBankingAppSOLVED {
 		// let's do some activities on the populated accounts, add transactions, etc.
 		// Deposit: adding a transaction with a positive value
 		// Withdraw: adding a transaction with a negative value
-		transactionController.addTransaction("5495-1234", -50.21);
+		transactionController.withdrawAmount("5495-1234", 50.21);
 		System.out.println("Account: after the 1st addTransaction function call...");
 		accountController.printAllAccounts();
 		
 		// and some more activities on the accounts
-		transactionController.addTransaction("5495-1234", 520.00);
-		transactionController.addTransaction("9999-1111", 21.00); // it seems this account does not exist in the loaded (populated) data, 
+		transactionController.depositAmount("5495-1234", 520.00);
+		transactionController.depositAmount("9999-1111", 21.00); // it seems this account does not exist in the loaded (populated) data, 
 											// but the addTransaction does not do that check, need to improve that function in future
 		// let's print the accounts and their balance to see if the above transaction have impacted their balances
 		System.out.println("Account: after the 2nd/3rd addTransaction function calls...");

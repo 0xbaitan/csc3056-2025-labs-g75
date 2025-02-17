@@ -11,6 +11,53 @@ public class SimpleBankingAppTestSOLVED {
 	private static final AccountController accountController = AccountController.getInstance();
 
 	
+	
+	public static void testDepositsWithInvalidAmount() {
+		final String TEST_ACCOUNT_NUMBER = "5495-1234";
+		double depositAmount = 0.00;
+		
+		try {
+			transactionController.depositAmount(TEST_ACCOUNT_NUMBER, depositAmount);
+			TestUtils.printTestFailed("testDeposits: TC2 failed - $0.00 accepted as a valid deposit amount");
+			transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER, depositAmount);
+		} catch(IllegalArgumentException e) {
+			TestUtils.printTestPassed("testDeposits: TC2 passed - $0.00 not accepted as a valid deposit amount");
+		}
+		
+		 depositAmount = -50.00;
+		 
+		 try {
+				transactionController.depositAmount(TEST_ACCOUNT_NUMBER, depositAmount);
+				TestUtils.printTestFailed("testDeposits: TC3 failed - negative values accepted as a valid deposit amount");
+				transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER, depositAmount);
+			} catch(IllegalArgumentException e) {
+				TestUtils.printTestPassed("testDeposits: TC3 passed - negative values not accepted as a valid deposit amount");
+			}
+	}
+
+	public static void testWithdrawalsWithInvalidAmount() {
+		final String TEST_ACCOUNT_NUMBER = "5495-1234";
+		double withdrawalAmount = 0.00;
+
+		try {
+			transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER, withdrawalAmount);
+			TestUtils.printTestFailed("testWithdrawals: TC2 failed - $0.00 accepted as a valid withdrawal amount");
+			transactionController.depositAmount(TEST_ACCOUNT_NUMBER, withdrawalAmount);
+		} catch(IllegalArgumentException e) {
+			TestUtils.printTestPassed("testWithdrawals: TC2 passed - $0.00 not accepted as a valid withdrawal amount");
+		}
+
+		 withdrawalAmount = -50.00;
+
+		 try {
+				transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER, withdrawalAmount);
+				TestUtils.printTestFailed("testWithdrawals: TC3 failed - negative values accepted as a valid withdrawal amount");
+				transactionController.depositAmount(TEST_ACCOUNT_NUMBER, withdrawalAmount);
+			} catch(IllegalArgumentException e) {
+				TestUtils.printTestPassed("testWithdrawals: TC3 passed - negative values not accepted as a valid withdrawal amount");
+			}
+	}
+	
 	// this test method (test case) verifies if the Deposit feature works properly
 	public static void testDeposits() {
 		
@@ -21,7 +68,7 @@ public class SimpleBankingAppTestSOLVED {
 		double depositAmount = 50.21;
 		
 		// 2-Exercise phase
-		transactionController.addTransaction(TEST_ACCOUNT_NUMBER, depositAmount);
+		transactionController.depositAmount(TEST_ACCOUNT_NUMBER, depositAmount);
 		double balanceAfter = accountController.getBalance(TEST_ACCOUNT_NUMBER);
 		
 		// 3-verify
@@ -39,7 +86,7 @@ public class SimpleBankingAppTestSOLVED {
 		
 		// 4-tear-down: put the system state back in where it was
 		// read more about the tear-down phase of test cases: http://xunitpatterns.com/Four%20Phase%20Test.html
-		transactionController.addTransaction(TEST_ACCOUNT_NUMBER, -depositAmount);
+		transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER, depositAmount);
 	}
 
 	// this test method (test case) verifies if the Withdraw feature works properly
@@ -52,7 +99,7 @@ public class SimpleBankingAppTestSOLVED {
 		double withdrawalAmount = 50.21;
 		
 		// 2-Exercise phase
-		transactionController.addTransaction(TEST_ACCOUNT_NUMBER, -withdrawalAmount);
+		transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER, withdrawalAmount);
 		double balanceAfter = accountController.getBalance(TEST_ACCOUNT_NUMBER);
 
 		// 3-verify
@@ -67,14 +114,17 @@ public class SimpleBankingAppTestSOLVED {
 		}
 		
 		// 4-tear-down
-		transactionController.addTransaction(TEST_ACCOUNT_NUMBER, withdrawalAmount);
+		transactionController.depositAmount(TEST_ACCOUNT_NUMBER, withdrawalAmount);
 	}
 
 	
 	public static void main(String[] args) {
 		// we need to call our test cases (methods)
 		testDeposits();
+		testDepositsWithInvalidAmount();
 		testWithdrawals();
+		testWithdrawalsWithInvalidAmount();
+	
 	}
 
 }

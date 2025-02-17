@@ -31,8 +31,26 @@ public class TransactionController {
 	public Vector<Transaction> getTransactions() {
 		return new Vector<>(transactions);
 	}
+
+
+	private void checkAmountIsValid(double amount) {
+		if(amount <= 0) {
+			throw new IllegalArgumentException("Amount must be greater than $0.00");
+		}
+	}
+
+
+	public void depositAmount(String account_number, double amount) {
+		checkAmountIsValid(amount);
+		addTransaction(account_number, amount);
+	}
+
+	public void withdrawAmount(String account_number, double amount) {
+		checkAmountIsValid(amount);
+		addTransaction(account_number, -amount);
+	}
   
-	public void addTransaction(String account_number, double amount) { 
+	private void addTransaction(String account_number, double amount) { 
 		Transaction aTransaction =  new Transaction(account_number, amount, Calendar.getInstance().getTime());
 		transactions.add(aTransaction);
 	}
