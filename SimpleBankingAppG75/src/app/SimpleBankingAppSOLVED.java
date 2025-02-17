@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Vector;
 
 import controller.UserController;
+import controller.AccountController;
 import model.Account;
 import model.Transaction;
 import model.User;
@@ -24,31 +25,6 @@ public class SimpleBankingAppSOLVED {
 		for  (int i = 0; i < users.size(); i++) 
             System.out.println(users.get(i).toString());	
 		System.out.println();
-	}
-	
-	
-	public static void loadAccountData()  {
-		// structure of each record: 
-		// account number, username (email) of account holder, account type (Standard or Saving), account_opening_date
-
-		// in the ideal case, we will read from file or database, but let's hard-code for now
-		Account anAccount;
-		try {
-			anAccount = new Account("5495-1234", "mike", "Standard", new SimpleDateFormat("dd/MM/yyyy").parse("20/08/2019"));
-			accounts.add(anAccount);
-			
-			anAccount = new Account("5495-1239", "mike", "Standard", new SimpleDateFormat("dd/MM/yyyy").parse("20/08/2020"));
-			accounts.add(anAccount);
-
-			anAccount = new Account("5495-1291", "mike", "Saving", new SimpleDateFormat("dd/MM/yyyy").parse("21/07/2019"));
-			accounts.add(anAccount);
-
-			anAccount = new Account("5495-6789", "David.McDonald@gmail.com", "Saving", new SimpleDateFormat("dd/MM/yyyy").parse("20/08/2019"));
-			accounts.add(anAccount);
-
-		} catch (ParseException e) {			
-			e.printStackTrace();
-		}  
 	}
 	
 	public static void printAllAccounts() {
@@ -97,7 +73,7 @@ public class SimpleBankingAppSOLVED {
 		// let's print them all to see if they have been loaded (populated) properly
 		printAllUsers();
 		
-		loadAccountData();
+		accounts = AccountController.loadAccountData();
 		// let's print them all to see if they have been loaded (populated) properly
 		System.out.println("Accounts: initial state, after loading...");
 		printAllAccounts();
