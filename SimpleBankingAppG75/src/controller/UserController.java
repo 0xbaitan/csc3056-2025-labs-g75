@@ -44,7 +44,7 @@ public class UserController {
 	}
 	
 	public Vector<User> getUsers() {
-		return users;
+		return new Vector<>(users);
 	}
 
 	public void printAllUsers() {

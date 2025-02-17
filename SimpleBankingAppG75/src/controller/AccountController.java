@@ -63,6 +63,10 @@ public class AccountController {
 		
 	}
 
+	public Vector<Account> getAccounts() {
+		return new Vector<>(accounts);
+	}
+
 	public void printAllAccounts() {
 		System.out.println("There are: " + accounts.size() + " accounts in the system.");
 		//System.out.println("Account_number | username_of_account_holder | account_type | account_opening_date");

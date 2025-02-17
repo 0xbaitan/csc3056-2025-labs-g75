@@ -26,11 +26,11 @@ public class TransactionController {
     		}
     	}
     	return local;
-    }
-    
-    public Vector<Transaction> getTransactions() {
-    	return transactions;
-    }
+	}
+	
+	public Vector<Transaction> getTransactions() {
+		return new Vector<>(transactions);
+	}
   
 	public void addTransaction(String account_number, double amount) { 
 		Transaction aTransaction =  new Transaction(account_number, amount, Calendar.getInstance().getTime());
