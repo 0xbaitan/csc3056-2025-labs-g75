@@ -64,6 +64,10 @@ public class AccountController {
 		
 	}
 
+	public boolean accountExists(String account_number) {
+		return accounts.stream().anyMatch(account -> account.getAccountNumber().equals(account_number));
+	}
+
 	public Vector<Account> getAccounts() {
 		return new Vector<>(accounts);
 	}

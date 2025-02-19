@@ -62,6 +62,59 @@ public class SimpleBankingAppTestSOLVED {
 				TestUtils.printTestPassed("testWithdrawals: TC3 passed - negative values not accepted as a valid withdrawal amount");
 			}
 	}
+
+
+	public static void testTransfers() {
+		final String TEST_FROM_ACCOUNT = "5495-1234";
+		final String TEST_TO_ACCOUNT = "5495-1239";
+		double transferAmount = 50.21;
+		double initialBalance = 1000;
+		
+		// Ensure there is sufficient balance before beginning exercise
+		transactionController.depositAmount(TEST_FROM_ACCOUNT, initialBalance);
+
+		// 1-Setup phase
+		double fromAccountBalanceBefore = accountController.getBalance(TEST_FROM_ACCOUNT);
+		double toAccountBalanceBefore = accountController.getBalance(TEST_TO_ACCOUNT);
+		
+
+		// 2-Exercise phase
+		try {
+		transactionController.transferAmount(TEST_FROM_ACCOUNT, TEST_TO_ACCOUNT, transferAmount);
+		} catch(IllegalArgumentException e) {
+			TestUtils.printTestFailed("testTransfers: TC1 failed - " + e.getMessage());
+			return;
+		}
+		double fromAccountBalanceAfter = accountController.getBalance(TEST_FROM_ACCOUNT);
+		double toAccountBalanceAfter = accountController.getBalance(TEST_TO_ACCOUNT);
+
+		// 3-verify
+		assert fromAccountBalanceBefore - transferAmount == fromAccountBalanceAfter;
+		if (fromAccountBalanceBefore - transferAmount == fromAccountBalanceAfter) {
+			TestUtils.printTestPassed("testTransfers: TC1 passed");
+		} else {
+			TestUtils.printTestFailed(
+					String.format("""
+			testTransfers: TC1 FAILED XXX: fromAccountBalanceBefore + transferAmount != fromAccountBalanceAfter
+			fromAccountBalanceBefore = %.2f ; transferAmount = %.2f ; fromAccountBalanceAfter = %.2f""", fromAccountBalanceBefore , transferAmount , fromAccountBalanceAfter));
+		}
+
+		assert toAccountBalanceBefore + transferAmount == toAccountBalanceAfter;
+		if (toAccountBalanceBefore +  transferAmount == toAccountBalanceAfter) {
+			TestUtils.printTestPassed("testTransfers: TC2 passed");
+		} else {
+			TestUtils.printTestFailed(
+					String.format("""
+			testTransfers: TC2 FAILED XXX: toAccountBalanceBefore - transferAmount != toAccountBalanceAfter
+			toAccountBalanceBefore = %.2f ; transferAmount = %.2f ; toAccountBalanceAfter = %.2f""", toAccountBalanceBefore , transferAmount , toAccountBalanceAfter));
+		}
+
+		// 4-tear-down
+		transactionController.transferAmount(TEST_TO_ACCOUNT, TEST_FROM_ACCOUNT, transferAmount);
+		transactionController.withdrawAmount(TEST_FROM_ACCOUNT, initialBalance);
+	
+
+	}
 	
 	// this test method (test case) verifies if the Deposit feature works properly
 	public static void testDeposits() {
@@ -208,6 +261,7 @@ public class SimpleBankingAppTestSOLVED {
 		testWithdrawals();
 		testWithdrawalsWithInvalidAmount();
 		testAggregateBalance();
+		testTransfers();
 	
 	}
 
