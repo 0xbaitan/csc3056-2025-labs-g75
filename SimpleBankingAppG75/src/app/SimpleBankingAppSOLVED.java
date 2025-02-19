@@ -5,9 +5,26 @@ import controller.AccountController;
 import controller.TransactionController;
 import controller.UserController;
 
+import java.text.SimpleDateFormat;
+import java.util.Vector;
+import model.Transaction;
+
 public class SimpleBankingAppSOLVED {
 
-
+	public static void printAllTransactionsForAccount(String account_number) {
+		AccountController accountController = AccountController.getInstance();
+		Vector<Transaction> transactions = accountController.getTransactionsForAccount(account_number);
+		System.out.println(String.format("%-10s| %-15s| %-15s| %-10s",
+				"#", "Account Number", "Amount", "Date"
+		));
+		System.out.println("--------------------------------------------------------------------------------");
+		for(int i = 0; i < transactions.size(); i++) {
+			System.out.println(String.format("%-10s| %-15s| %-15s| %-10s",
+					i+1, transactions.get(i).getAccountNumber(), "$"+transactions.get(i).getTransactionAmount(), 
+					new SimpleDateFormat("(MMM dd, yyyy)").format(transactions.get(i).getTransactionDate())
+			));
+		}
+	}
 	public static void main(String[] args) {
 		
 		UserController userController = UserController.getInstance();
@@ -34,6 +51,11 @@ public class SimpleBankingAppSOLVED {
 		// let's print the accounts and their balance to see if the above transaction have impacted their balances
 		System.out.println("Account: after the 2nd/3rd addTransaction function calls...");
 		accountController.printAllAccounts();
+
+		System.out.println("Transactions for account 5495-1234");
+		System.out.println("Printing transactions...");
+		printAllTransactionsForAccount("5495-1234");
+
 		
 
 	}

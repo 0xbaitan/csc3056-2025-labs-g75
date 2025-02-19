@@ -112,4 +112,16 @@ public class AccountController {
 		
 	}
 
+
+	public Vector<Transaction> getTransactionsForAccount(String account_number) {
+		Vector<Transaction> transactions = transactionController.getTransactions();
+		Vector<Transaction> accountTransactions = new Vector<Transaction>();
+		for (int i = 0; i < transactions.size(); i++) {
+			if (transactions.get(i).getAccountNumber().equals(account_number)) {
+				accountTransactions.add(transactions.get(i));
+			}
+		}
+		return accountTransactions;
+	}
+
 }
