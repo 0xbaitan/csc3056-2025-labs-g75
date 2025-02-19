@@ -3,6 +3,7 @@ package controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
+import java.util.stream.Stream;
 
 import model.Account;
 import model.Transaction;
@@ -65,6 +66,16 @@ public class AccountController {
 
 	public Vector<Account> getAccounts() {
 		return new Vector<>(accounts);
+	}
+
+	public Vector<Account> getAccounts(String username) {
+		Vector<Account> userAccounts = new Vector<Account>();
+		for (int i = 0; i < accounts.size(); i++) {
+			if (accounts.get(i).getUsernameOfAccountHolder().equals(username)) {
+				userAccounts.add(accounts.get(i));
+			}
+		}
+		return userAccounts;
 	}
 
 	public void printAllAccounts() {

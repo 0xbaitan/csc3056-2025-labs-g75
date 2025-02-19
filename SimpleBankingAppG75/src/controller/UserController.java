@@ -2,7 +2,7 @@ package controller;
 
 import java.util.Vector;
 
-
+import model.Account;
 import model.User;
 
 public class UserController {
@@ -10,6 +10,8 @@ public class UserController {
 	private static volatile UserController instance;
 	
 	private final Vector<User> users;
+
+	private static final AccountController accountController = AccountController.getInstance();
 	
 	private UserController() {
 		users = new Vector<User>();
@@ -56,6 +58,22 @@ public class UserController {
 	        System.out.println(users.get(i).toString());	
 		}
 		System.out.println();
+	}
+
+
+
+
+
+	public double getAggregateBalance(String username) {
+		double aggregateBalance = 0.0;
+		Vector<Account> accounts = accountController.getAccounts(username);
+		if(accounts.isEmpty()) {
+			throw new IllegalArgumentException("No account found for the user: " + username);
+		}
+		for (Account account : accounts) {
+			aggregateBalance += accountController.getBalance(account.getAccountNumber());
+		}
+		return aggregateBalance;
 	}
 
 }

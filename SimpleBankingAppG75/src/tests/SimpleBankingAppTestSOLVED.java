@@ -2,6 +2,10 @@ package tests;
 
 import controller.AccountController;
 import controller.TransactionController;
+import controller.UserController;
+import java.util.List;
+import java.util.Vector;
+import model.Account;
 import utils.TestUtils;
 
 public class SimpleBankingAppTestSOLVED {
@@ -9,6 +13,7 @@ public class SimpleBankingAppTestSOLVED {
     
 	private static final TransactionController transactionController = TransactionController.getInstance();
 	private static final AccountController accountController = AccountController.getInstance();
+	private static final UserController userController = UserController.getInstance();
 
 	
 	
@@ -89,6 +94,84 @@ public class SimpleBankingAppTestSOLVED {
 		transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER, depositAmount);
 	}
 
+
+	public static void testAggregateBalance() {
+		final String TEST_USERNAME = "mike";
+		final String TEST_ACCOUNT_NUMBER_1 = "5495-1234"; // Mike savings account 1
+		final String TEST_ACCOUNT_NUMBER_2 = "5495-1239"; // Mike savings account 2
+		final String TEST_ACCOUNT_NUMBER_3 = "5495-1291"; // Mike savings account 3
+
+	    Vector<Account> accounts = accountController.getAccounts(TEST_USERNAME);
+
+		// 1-Pre-checks
+		if(accounts.size() != 3) {
+			TestUtils.printTestFailed("testAggregateBalance: TC1 failed - Mike does not have 3 accounts");
+			return;
+		}
+
+	    List<String> accountNumbers = accounts.stream().map(Account::getAccountNumber).toList();
+
+		if(!accountNumbers.contains(TEST_ACCOUNT_NUMBER_1)) {
+			TestUtils.printTestFailed("testAggregateBalance: TC1 failed - Mike does not have account 1");
+			return;
+		}
+
+		if(!accountNumbers.contains(TEST_ACCOUNT_NUMBER_2)) {
+			TestUtils.printTestFailed("testAggregateBalance: TC1 failed - Mike does not have account 2");
+			return;
+		}
+
+		if(!accountNumbers.contains(TEST_ACCOUNT_NUMBER_3)) {
+			TestUtils.printTestFailed("testAggregateBalance: TC1 failed - Mike does not have account 3");
+			return;
+		}
+
+
+		double balanceBefore = accountController.getBalance(TEST_ACCOUNT_NUMBER_1) + accountController.getBalance(TEST_ACCOUNT_NUMBER_2) + accountController.getBalance(TEST_ACCOUNT_NUMBER_3);
+
+		double firstDepositToAccount1 = 2000.00;
+		double secondDepositToAccount2 = 3000.00;
+		double thirdDepositToAccount3 = 500.00;
+		double firstWithdrawalFromAccount1 = 1000.00;
+		double secondWithdrawalFromAccount2 = 500.00;
+		double thirdWithdrawalFromAccount3 = 100.00;
+
+		double netDeposit = firstDepositToAccount1 + secondDepositToAccount2 + thirdDepositToAccount3;
+		double netWithdrawal = firstWithdrawalFromAccount1 + secondWithdrawalFromAccount2 + thirdWithdrawalFromAccount3;
+		double balanceAfter = balanceBefore + netDeposit - netWithdrawal;
+
+		transactionController.depositAmount(TEST_ACCOUNT_NUMBER_1, firstDepositToAccount1);
+		transactionController.depositAmount(TEST_ACCOUNT_NUMBER_2, secondDepositToAccount2);
+		transactionController.depositAmount(TEST_ACCOUNT_NUMBER_3, thirdDepositToAccount3);
+
+		transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER_1, firstWithdrawalFromAccount1);
+		transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER_2, secondWithdrawalFromAccount2);
+		transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER_3, thirdWithdrawalFromAccount3);
+
+		double aggregateBalance = userController.getAggregateBalance(TEST_USERNAME);
+
+		assert balanceAfter == aggregateBalance;
+		if (balanceAfter == aggregateBalance)
+			TestUtils.printTestPassed("testAggregateBalance: TC1 passed");
+		else {
+			TestUtils.printTestFailed(
+					String.format("""
+			testAggregateBalance: TC1 FAILED XXX: balanceAfter != aggregateBalance 
+			balanceAfter = %.2f ; aggregateBalance = %.2f""", balanceAfter , aggregateBalance));
+		}
+
+
+		// 4-tear-down: put the system state back in where it was
+		transactionController.depositAmount(TEST_ACCOUNT_NUMBER_1, firstWithdrawalFromAccount1);
+		transactionController.depositAmount(TEST_ACCOUNT_NUMBER_2, secondWithdrawalFromAccount2);
+		transactionController.depositAmount(TEST_ACCOUNT_NUMBER_3, thirdWithdrawalFromAccount3);
+
+		transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER_1, firstDepositToAccount1);
+		transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER_2, secondDepositToAccount2);
+		transactionController.withdrawAmount(TEST_ACCOUNT_NUMBER_3, thirdDepositToAccount3);
+ 
+	}
+
 	// this test method (test case) verifies if the Withdraw feature works properly
 	
 	public static void testWithdrawals() {
@@ -124,6 +207,7 @@ public class SimpleBankingAppTestSOLVED {
 		testDepositsWithInvalidAmount();
 		testWithdrawals();
 		testWithdrawalsWithInvalidAmount();
+		testAggregateBalance();
 	
 	}
 
