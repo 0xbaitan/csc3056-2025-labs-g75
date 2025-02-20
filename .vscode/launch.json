@@ -1,28 +1,35 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "java",
-            "name": "Current File",
-            "request": "launch",
-            "mainClass": "${file}"
-        },
-        {
-            "type": "java",
-            "name": "SimpleBankingApp",
-            "request": "launch",
-            "mainClass": "SimpleBankingAppG75/app.SimpleBankingApp",
-            "projectName": "SimpleBankingAppG75"
-        },
-        {
-            "type": "java",
-            "name": "SimpleBankingAppTest",
-            "request": "launch",
-            "mainClass": "SimpleBankingAppG75/tests.SimpleBankingAppTest",
-            "projectName": "SimpleBankingAppG75"
-        }
-    ]
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "SimpleBankingAppTestSOLVED",
+      "request": "launch",
+      "mainClass": "SimpleBankingAppG75/tests.SimpleBankingAppTestSOLVED",
+      "projectName": "SimpleBankingAppG75"
+    },
+    {
+      "type": "java",
+      "name": "Current File",
+      "request": "launch",
+      "mainClass": "${file}"
+    },
+    {
+      "type": "java",
+      "name": "SimpleBankingApp",
+      "request": "launch",
+      "mainClass": "SimpleBankingAppG75/app.SimpleBankingApp",
+      "projectName": "SimpleBankingAppG75"
+    },
+    {
+      "type": "java",
+      "name": "SimpleBankingAppTest",
+      "request": "launch",
+      "mainClass": "SimpleBankingAppG75/tests.SimpleBankingAppTest",
+      "projectName": "SimpleBankingAppG75"
+    }
+  ]
 }

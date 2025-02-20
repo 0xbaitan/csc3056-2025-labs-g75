@@ -4,7 +4,6 @@ package app;
 import controller.AccountController;
 import controller.TransactionController;
 import controller.UserController;
-
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 import model.Transaction;
@@ -46,8 +45,32 @@ public class SimpleBankingAppSOLVED {
 		
 		// and some more activities on the accounts
 		transactionController.depositAmount("5495-1234", 520.00);
-		transactionController.depositAmount("9999-1111", 21.00); // it seems this account does not exist in the loaded (populated) data, 
-											// but the addTransaction does not do that check, need to improve that function in future
+		transactionController.depositAmount("5495-1239", 500.00);
+
+		// Let's print the aggregate balance for mike
+		System.out.println("Balance for mike: $" + userController.getAggregateBalance("mike"));
+		System.out.println();
+		
+		//Printing the balances before transfer
+		System.out.println("Balances before transfer...");
+		accountController.printAllAccounts();
+		
+		// Transfer amount from 5495-1234 to 5495-1239
+		transactionController.transferAmount("5495-1234", "5495-1239", 100.00);
+		
+		//Printing the balances after transfer
+		System.out.println("Balances after transfer...");
+		accountController.printAllAccounts();
+
+		
+		// transactionController.depositAmount("9999-1111", 21.00);
+		// it seems this account does not exist in the loaded (populated) data, 
+		// but the addTransaction does not do that check, need to improve that function in future
+
+		// Let's print the transaction results of an invalid amount
+		//	transactionController.depositAmount("5495-1234", -100.00);
+	
+		 
 		// let's print the accounts and their balance to see if the above transaction have impacted their balances
 		System.out.println("Account: after the 2nd/3rd addTransaction function calls...");
 		accountController.printAllAccounts();

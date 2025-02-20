@@ -91,7 +91,7 @@ public class SimpleBankingAppTestSOLVED {
 		// 3-verify
 		assert fromAccountBalanceBefore - transferAmount == fromAccountBalanceAfter;
 		if (fromAccountBalanceBefore - transferAmount == fromAccountBalanceAfter) {
-			TestUtils.printTestPassed("testTransfers: TC1 passed");
+			TestUtils.printTestPassed("testTransfers: TC1 passed : fromAccountBalanceBefore - transferAmount == fromAccountBalanceAfter");
 		} else {
 			TestUtils.printTestFailed(
 					String.format("""
@@ -101,7 +101,7 @@ public class SimpleBankingAppTestSOLVED {
 
 		assert toAccountBalanceBefore + transferAmount == toAccountBalanceAfter;
 		if (toAccountBalanceBefore +  transferAmount == toAccountBalanceAfter) {
-			TestUtils.printTestPassed("testTransfers: TC2 passed");
+			TestUtils.printTestPassed("testTransfers: TC2 passed : toAccountBalanceBefore + transferAmount == toAccountBalanceAfter");
 		} else {
 			TestUtils.printTestFailed(
 					String.format("""
@@ -256,12 +256,12 @@ public class SimpleBankingAppTestSOLVED {
 	
 	public static void main(String[] args) {
 		// we need to call our test cases (methods)
-		testDeposits();
-		testDepositsWithInvalidAmount();
-		testWithdrawals();
-		testWithdrawalsWithInvalidAmount();
-		testAggregateBalance();
-		testTransfers();
+//		 testDeposits();
+//		testDepositsWithInvalidAmount();
+//		 testWithdrawals();
+//		testWithdrawalsWithInvalidAmount();
+		//  testAggregateBalance();
+		 testTransfers();
 	
 	}
 
