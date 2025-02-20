@@ -1,6 +1,7 @@
 /bin/
 .vscode
-*/.settings
-*/.gitignore
-*/.project
-*/.classpath
+**/.settings
+**/.gitignore
+**/.project
+**/.classpath
+**/module-info.java
