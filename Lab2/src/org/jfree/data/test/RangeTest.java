@@ -2,6 +2,8 @@ package org.jfree.data.test;
 
 import static org.junit.Assert.*;
 
+import java.security.InvalidParameterException;
+
 import org.jfree.data.Range;
 import org.junit.After;
 import org.junit.Before;
@@ -170,6 +172,168 @@ public class RangeTest {
 				new Range(-4, 10), combinedRange);
 	}
 
+	// ------------------- expandToInclude function tests ----------------
+
+	/**
+	 * SECT2.1: The value is left of the range.
+	 * 
+	 * Expects the range expand and have the value at the lower bound.
+	 */
+	@Test
+	public void testExpandToInclude_ShouldExpandTLowerBoundToValue_OnValueLeftOfRange() {
+		Range range = new Range(-3, 5);
+		double value = -4;
+		Range expandedRange = Range.expandToInclude(range, value);
+		Range expectedRange = new Range(-4, 5);
+		assertSame("SECT2.1 - The value should be at the lower bound of the range but is not", expectedRange,
+				expandedRange);
+
+	}
+
+	/**
+	 * 
+	 * SECT2.2: Value is within the range.
+	 * 
+	 * Expects the range to remain unchanged.
+	 */
+	@Test
+	public void testExpandToInclude_ShouldNotChangeRange_OnValueWithinRange() {
+		Range range = new Range(-3, 5);
+		double value = 0;
+		Range expandedRange = Range.expandToInclude(range, value);
+		Range expectedRange = new Range(-3, 5);
+		assertSame("SECT2.2 - The range should remain unchanged but it did not", expectedRange, expandedRange);
+	}
+
+	/**
+	 * 
+	 * SECT2.3: Value is right of the range.
+	 * 
+	 * Expects the range to expand and have the value at the upper bound.
+	 */
+	@Test
+	public void testExpandToInclude_ShouldExpandToUpperBound_OnValueRightOfRange() {
+		Range range = new Range(-3, 5);
+		double value = 7;
+		Range expandedRange = Range.expandToInclude(range, value);
+		Range expectedRange = new Range(-3, 7);
+		assertSame("SECT2.3 - The value should be at the upper bound of the range but is not", expectedRange,
+				expandedRange);
+	}
+
+	/**
+	 * 
+	 * SECT2.4: Value is not a number.
+	 * 
+	 * Expects the range to remain unchanged.
+	 */
+	@Test
+	public void testExpandToInclude_ShouldNotChangeRange_OnValueIsNaN() {
+		Range range = new Range(5, 5);
+		double value = Double.NaN;
+		Range expandedRange = Range.expandToInclude(range, value);
+		Range expectedRange = new Range(5, 5);
+		assertSame("SECT2.4 - The range should remain unchanged when value is NaN but it did not", expectedRange,
+				expandedRange);
+	}
+
+	/**
+	 * 
+	 * SECT2.5: Range is null.
+	 * 
+	 * Expects an InvalidParameterException to be thrown.
+	 */
+	@Test()
+	public void testExpandToInclude_ShouldThrowException_OnRangeIsNull() {
+		Range range = null;
+		double value = 5;
+
+		assertThrows("SECT2.5 - An InvalidParameterException should be thrown when the range passed is null",
+				InvalidParameterException.class, () -> {
+					Range.expandToInclude(range, value);
+				});
+	}
+
+	/**
+	 * 
+	 * SECT2.6 (BVA): Value is at lower bound of the range.
+	 * 
+	 * Expects the range to remain unchanged.
+	 */
+	@Test
+	public void testExpandToInclude_ShouldNotChangeRange_OnValueAtLowerBound() {
+		Range range = new Range(3, 5);
+		double value = 3;
+		Range expandedRange = Range.expandToInclude(range, value);
+		Range expectedRange = new Range(3, 5);
+		assertSame("SECT2.6 - The range should remain unchanged when value is at lower bound but it did not",
+				expectedRange, expandedRange);
+	}
+
+	/**
+	 * 
+	 * SECT2.7 (BVA): Value is at upper bound of the range.
+	 * 
+	 * Expects the range to remain unchanged.
+	 */
+	@Test
+	public void testExpandToInclude_ShouldNotChangeRange_OnValueAtUpperBound() {
+		Range range = new Range(3, 5);
+		double value = 5;
+		Range expandedRange = Range.expandToInclude(range, value);
+		Range expectedRange = new Range(3, 5);
+		assertSame("SECT2.7 - The range should remain unchanged when value is at upper bound but it did not",
+				expectedRange, expandedRange);
+	}
+
+	/**
+	 * 
+	 * SECT2.8 (BVA): Value is just left of the lower bound by a small margin.
+	 * 
+	 * Expects the range to expand to include the value at the lower bound.
+	 */
+	@Test
+	public void testExpandToInclude_ShouldExpandLowerBoundToValue_OnValueJustLeftOfLowerBound() {
+		Range range = new Range(-3, 5);
+		double value = -3.000001;
+		Range expandedRange = Range.expandToInclude(range, value);
+		Range expectedRange = new Range(-3.000001, 5);
+		assertSame("SECT2.8 - The range should expand to include the value at the lower bound but it did not",
+				expectedRange, expandedRange);
+	}
+
+	/**
+	 * 
+	 * SECT2.9 (BVA): Value is just right of the upper bound by a small margin.
+	 * 
+	 * Expects the range to expand to include the value at the upper bound.
+	 */
+	@Test
+	public void testExpandToInclude_ShouldExpandUpperBoundToValue_OnValueJustRightOfUpperBound() {
+		Range range = new Range(-3, 5);
+		double value = 5.000001;
+		Range expandedRange = Range.expandToInclude(range, value);
+		Range expectedRange = new Range(-3, 5.000001);
+		assertSame("SECT2.9 - The range should expand to include the value at the upper bound but it did not",
+				expectedRange, expandedRange);
+	}
+
+	/**
+	 * 
+	 * SECT2.10 (BVA): Value is within equal range.
+	 * 
+	 * Expects the range to remain unchanged.
+	 */
+	@Test
+	public void testExpandToInclude_ShouldNotChangeRange_OnValueWithinEqualRange() {
+		Range range = new Range(5, 5);
+		double value = 5;
+		Range expandedRange = Range.expandToInclude(range, value);
+		Range expectedRange = new Range(5, 5);
+		assertSame("SECT2.10 - The range should remain unchanged when value is within equal range but it did not",
+				expectedRange, expandedRange);
+	}
+
 	// ------------------- intersects function tests ---------------------
 
 	/**
@@ -323,10 +487,9 @@ public class RangeTest {
 		assertTrue("SECT3.10 - Intersects should be true. Instead got: " + isIntersecting + " where input range is ("
 				+ lower + ", " + upper + ") ", isIntersecting);
 	}
-	
-	
+
 	// ------------------- constrains function tests ---------------------
-	
+
 	/**
 	 * SECT5.1: Value is within bounds.
 	 * 
@@ -336,9 +499,10 @@ public class RangeTest {
 	public void testConstrain_ShouldBeSame_OnValueWithinRange() {
 		double value = 0;
 		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
-		assertEquals("SECT5.1 - Same value (" + value + ") to be returned but instead got: " + constrainedValue, value, constrainedValue, 1e-6);
+		assertEquals("SECT5.1 - Same value (" + value + ") to be returned but instead got: " + constrainedValue, value,
+				constrainedValue, 1e-6);
 	}
-	
+
 	/**
 	 * SECT5.2: Value is to the left of the range’s lower bound.
 	 * 
@@ -414,8 +578,8 @@ public class RangeTest {
 	public void testConstrain_ShouldBeUpperBound_OnValueBeingUpperBound() {
 		double value = 5;
 		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
-		assertEquals("SECT5.7 - Value (5) to be returned but instead got: " + constrainedValue, value,
-				constrainedValue, 1e-6);
+		assertEquals("SECT5.7 - Value (5) to be returned but instead got: " + constrainedValue, value, constrainedValue,
+				1e-6);
 	}
 
 	/**
@@ -456,7 +620,5 @@ public class RangeTest {
 		assertEquals("SECT5.10 - Upper bound (5) to be returned but instead got: " + constrainedValue, 5,
 				constrainedValue, 1e-6);
 	}
-
-
 
 }
