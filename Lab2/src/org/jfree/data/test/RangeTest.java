@@ -11,11 +11,13 @@ public class RangeTest {
 
 	private Range rangeObjectUnderTest;
 	private Range rangeObjectToTestForIntersects;
+	private Range rangeObjectToTestForConstrain;
 
 	@Before
 	public void setUp() throws Exception {
 		rangeObjectUnderTest = new Range(-1, 1);
 		rangeObjectToTestForIntersects = new Range(-5, 5);
+		rangeObjectToTestForConstrain = new Range(-5, 5);
 	}
 
 	@After
@@ -321,4 +323,140 @@ public class RangeTest {
 		assertTrue("SECT3.10 - Intersects should be true. Instead got: " + isIntersecting + " where input range is ("
 				+ lower + ", " + upper + ") ", isIntersecting);
 	}
+	
+	
+	// ------------------- constrains function tests ---------------------
+	
+	/**
+	 * SECT5.1: Value is within bounds.
+	 * 
+	 * Expects {@code constrain} to return the same value.
+	 */
+	@Test
+	public void testConstrain_ShouldBeSame_OnValueWithinRange() {
+		double value = 0;
+		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
+		assertEquals("SECT5.1 - Same value (" + value + ") to be returned but instead got: " + constrainedValue, value, constrainedValue, 1e-6);
+	}
+	
+	/**
+	 * SECT5.2: Value is to the left of the range’s lower bound.
+	 * 
+	 * Expects {@code constrain} to return the lower bound.
+	 */
+	@Test
+	public void testConstrain_ShouldBeLowerBound_OnValueLeftOfLowerBound() {
+		double value = -10;
+		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
+		assertEquals("SECT5.2 - Lower bound (-5) to be returned but instead got: " + constrainedValue, -5,
+				constrainedValue, 1e-6);
+	}
+
+	/**
+	 * SECT5.3: Value is to the right of the range’s upper bound.
+	 * 
+	 * Expects {@code constrain} to return the upper bound.
+	 */
+	@Test
+	public void testConstrain_ShouldBeUpperBound_OnValueRightOfUpperBound() {
+		double value = 10;
+		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
+		assertEquals("SECT5.3 - Upper bound (5) to be returned but instead got: " + constrainedValue, 5,
+				constrainedValue, 1e-6);
+	}
+
+	/**
+	 * SECT5.4: Not a number.
+	 * 
+	 * Expects {@code constrain} to return NaN.
+	 */
+	@Test
+	public void testConstrain_ShouldBeNaN_OnValueBeingNaN() {
+		double value = Double.NaN;
+		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
+		assertTrue("SECT5.4 - Should be NaN but instead got: " + constrainedValue, Double.isNaN(constrainedValue));
+	}
+
+	/**
+	 * SECT5.5 (BVA): Value is to the right of the range’s lower bound by a very
+	 * small margin.
+	 * 
+	 * Expects {@code constrain} to return the same value.
+	 */
+	@Test
+	public void testConstrain_ShouldBeSame_OnValueRightOfLowerBoundBySmallMargin() {
+		double value = -4.999999;
+		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
+		assertEquals("SECT5.5 - Same value (" + value + ") to be returned but instead got: " + constrainedValue, value,
+				constrainedValue, 1e-6);
+	}
+
+	/**
+	 * SECT5.6 (BVA): Value is to the left of the range’s upper bound by a very
+	 * small margin.
+	 * 
+	 * Expects {@code constrain} to return the same value.
+	 */
+	@Test
+	public void testConstrain_ShouldBeSame_OnValueLeftOfUpperBoundBySmallMargin() {
+		double value = 4.999999;
+		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
+		assertEquals("SECT5.6 - Same value (" + value + ") to be returned but instead got: " + constrainedValue, value,
+				constrainedValue, 1e-6);
+	}
+
+	/**
+	 * SECT5.7 (BVA): Value is just at the lower bound.
+	 * 
+	 * Expects {@code constrain} to return the lower bound.
+	 */
+	@Test
+	public void testConstrain_ShouldBeUpperBound_OnValueBeingUpperBound() {
+		double value = 5;
+		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
+		assertEquals("SECT5.7 - Value (5) to be returned but instead got: " + constrainedValue, value,
+				constrainedValue, 1e-6);
+	}
+
+	/**
+	 * SECT5.8 (BVA): Value is just at the upper bound.
+	 * 
+	 * Expects {@code constrain} to return the upper bound.
+	 */
+	@Test
+	public void testConstrain_ShouldBeLowerBound_OnValueBeingLowerBound() {
+		double value = -5;
+		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
+		assertEquals("SECT5.8 - value (-5) to be returned but instead got: " + constrainedValue, value,
+				constrainedValue, 1e-6);
+	}
+
+	/**
+	 * SECT5.9 (BVA): Value is just left of the lower bound.
+	 * 
+	 * Expects {@code constrain} to return the lower bound.
+	 */
+	@Test
+	public void testConstrain_ShouldBeLowerBound_OnValueLeftOfLowerBoundBySmallMargin() {
+		double value = -5.000001;
+		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
+		assertEquals("SECT5.9 - Lower bound (-5) to be returned but instead got: " + constrainedValue, -5,
+				constrainedValue, 1e-6);
+	}
+
+	/**
+	 * SECT5.10 (BVA): Value is just right of the upper bound.
+	 * 
+	 * Expects {@code constrain} to return the upper bound.
+	 */
+	@Test
+	public void testConstrain_ShouldBeUpperBound_OnValueRightOfUpperBoundBySmallMargin() {
+		double value = 5.000001;
+		double constrainedValue = rangeObjectToTestForConstrain.constrain(value);
+		assertEquals("SECT5.10 - Upper bound (5) to be returned but instead got: " + constrainedValue, 5,
+				constrainedValue, 1e-6);
+	}
+
+
+
 }
