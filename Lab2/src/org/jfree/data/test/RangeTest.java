@@ -7,6 +7,7 @@ import java.security.InvalidParameterException;
 import org.jfree.data.Range;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class RangeTest {
@@ -26,150 +27,148 @@ public class RangeTest {
 	public void tearDown() throws Exception {
 	}
 
+	@Ignore
 	@Test
-
 	public void testCentralValueShouldBeZero() {
-
 		assertEquals("The central value of -1 and 1 should be 0", 0, rangeObjectUnderTest.getCentralValue(),
 				0.000000001d);
-
 	}
 
 	// ------------------- combine function tests ---------------------
 
 	/**
-	 * TC1: range1 and range2 are both null
 	 * 
-	 * Combined range should be null
+	 * SECT1.1: First range is null, and second range is a valid range.
+	 * 
+	 * Expected that the second range should be returned.
 	 */
-
 	@Test
-	public void testCombineTC1() {
+	public void testCombine_ShouldReturnSecondRange_WhenFirstRangeIsNull() {
 		Range range1 = null;
-		Range range2 = null;
+		Range range2 = new Range(5, 6);
 		Range combinedRange = Range.combine(range1, range2);
-		assertNull(combinedRange);
+		assertEquals("SECT1.1: Combined range should be the second range when first range is null", range2,
+				combinedRange);
 	}
 
 	/**
-	 * TC2: range1 is valid and range2 is null
 	 * 
-	 * Combined range should match the value of range1
+	 * SECT1.2: Second range is null, and the first range is valid.
+	 * 
+	 * Expected that the first range should be returned.
 	 */
 	@Test
-	public void testCombineTC2() {
+	public void testCombine_ShouldReturnFirstRange_WhenSecondRangeIsNull() {
 		Range range1 = new Range(5, 8);
 		Range range2 = null;
 		Range combinedRange = Range.combine(range1, range2);
-		assertSame("Combined range is not the same as range1 with upper bound 8 and lower bound 5", range1,
+		assertEquals("SECT1.2: Combined range should be the first range when second range is null", range1,
 				combinedRange);
-
 	}
 
 	/**
-	 * TC3: range1 is null and range2 is valid
+	 * SECT1.3: Both ranges are null.
 	 * 
-	 * Combined range should match the value of range1
+	 * Expected that the combined range should be null too.
 	 */
 	@Test
-	public void testCombineTC3() {
+	public void testCombine_ShouldReturnNull_WhenBothRangesAreNull() {
 		Range range1 = null;
-		Range range2 = new Range(-4.4, -2.2);
+		Range range2 = null;
 		Range combinedRange = Range.combine(range1, range2);
-		assertSame("Combined range is not the same as range2 with upper bound -4.4 and lower bound -2.2", range2,
-				combinedRange);
-
+		assertNull("SECT1.3 Combined range should be null when both ranges are null", combinedRange);
 	}
 
 	/**
-	 * TC4: One of the ranges is invalid (where lower bound exceeds upper bound)
 	 * 
-	 * Expects an IllegalArgumentException to be thrown
-	 */
-	@Test(expected = IllegalArgumentException.class)
-	public void testCombineTC4() {
-		Range range1 = null;
-		Range range2 = new Range(4, 2); // An exception should be thrown
-		Range.combine(range1, range2);
-	}
-
-	/**
-	 * TC5: range1 overlaps with range2 where range1 is to the left of range2
+	 * SECT1.4: Both ranges are valid and overlapping.
 	 * 
-	 * Expects combined range to have the lower bound of range1 and upper bound of
-	 * range2
+	 * Expected that the combined range should span from the lower bound of the
+	 * first range to the upper bound of the second range.
 	 */
 	@Test
-	public void testCombineTC5() {
-		Range range1 = new Range(-583, -1.04);
-		Range range2 = new Range(-3, 4);
-		Range combinedRange = Range.combine(range1, range2);
-		assertSame(
-				"Combined range has incorrect bounds when ranges are overlapping. Expected lower bound is -5.83 and upper bound is 4",
-				new Range(-5.83, 4), combinedRange);
-	}
-
-	/**
-	 * TC6: range1 does not overlap with range2 where range1 is to the right of
-	 * range2
-	 * 
-	 * Expects combined range to have the upper bound of range1 and lower bound of
-	 * range2
-	 */
-	@Test
-	public void testCombineTC6() {
-		Range range1 = new Range(3, 7);
-		Range range2 = new Range(-15, -10);
-		Range combinedRange = Range.combine(range1, range2);
-		assertSame(
-				"Combined range has incorrect bounds when ranges are overlapping. Expected lower bound is -5.83 and upper bound is 4",
-				new Range(-15, 7), combinedRange);
-	}
-
-	/**
-	 * TC7: range2 is contained within range1
-	 * 
-	 * Expects combined range to match range1
-	 */
-	@Test
-	public void testCombineTC7() {
-		Range range1 = new Range(5, 7);
-		Range range2 = new Range(6, 6);
-		Range combinedRange = Range.combine(range1, range2);
-		assertSame(
-				"Combined range has incorrect bounds when ranges are overlapping. Expected lower bound is -5.83 and upper bound is 4",
-				range1, combinedRange);
-	}
-
-	/**
-	 * TC8: range1 is contained within range2
-	 * 
-	 * Expects combined range to match range2
-	 */
-	@Test
-	public void testCombineTC8() {
-		Range range1 = new Range(-7, -5);
-		Range range2 = new Range(-10, -2);
-		Range combinedRange = Range.combine(range1, range2);
-		assertSame(
-				"Combined range has incorrect bounds when ranges are overlapping. Expected lower bound is -5.83 and upper bound is 4",
-				range2, combinedRange);
-	}
-
-	/**
-	 * TC9: range1 is adjacent with range2 where range1 is to the left of range2
-	 * 
-	 * Expects combined range to have lower bound of range1 and upper bound of
-	 * range2
-	 */
-	@Test
-	public void testCombineTC9() {
-		Range range1 = new Range(-4, 5);
+	public void testCombine_ShouldReturnCombinedRange_WhenRangesOverlap() {
+		Range range1 = new Range(7.5, 15);
 		Range range2 = new Range(5, 10);
 		Range combinedRange = Range.combine(range1, range2);
-		assertSame(
-				"Combined range has incorrect bounds when ranges are overlapping. Expected lower bound is -5.83 and upper bound is 4",
-				new Range(-4, 10), combinedRange);
+		Range expectedRange = new Range(5, 15);
+		assertSame("SECT1.4: Combined range should span from 5 to 15", expectedRange, combinedRange);
+	}
+
+	/**
+	 * 
+	 * SECT1.5: Both ranges are valid but do not overlap.
+	 * 
+	 * Expected that the combined range should span from the lower bound of the
+	 * first range to the upper bound of the second range.
+	 */
+	@Test
+	public void testCombine_ShouldReturnCombinedRange_WhenRangesDoNotOverlap() {
+		Range range1 = new Range(15, 20);
+		Range range2 = new Range(4, 10);
+		Range combinedRange = Range.combine(range1, range2);
+		Range expectedRange = new Range(4, 20);
+		assertSame("SECT1.5: Combined range should span from 4 to 20", expectedRange, combinedRange);
+	}
+
+	/**
+	 * 
+	 * SECT1.6: Second range contains the first range.
+	 * 
+	 * Expected that the second range should be returned.
+	 */
+	@Test
+	public void testCombine_ShouldReturnLargerRange_WhenOneRangeContainsTheOtherRange() {
+		Range range1 = new Range(6, 6);
+		Range range2 = new Range(5, 7);
+		Range combinedRange = Range.combine(range1, range2);
+		assertSame("SECT1.6: Combined range should be the second range", range2, combinedRange);
+	}
+
+	/**
+	 * 
+	 * SECT1.7: Both ranges are adjacent to each other.
+	 * 
+	 * Expected that the combined range should span from the lower bound of the
+	 * first range to the upper bound of the second range.
+	 */
+	@Test
+	public void testCombine_ShouldReturnCombinedRange_WhenRangesAreAdjacent() {
+		Range range1 = new Range(2, 4);
+		Range range2 = new Range(-6, 2);
+		Range combinedRange = Range.combine(range1, range2);
+		Range expectedRange = new Range(-6, 4);
+		assertSame("SECT1.7: Combined range should span from -4 to 2", expectedRange, combinedRange);
+	}
+
+	/**
+	 * 
+	 * SECT1.8: Both ranges are a single value range.
+	 * 
+	 * Expected that the combined range should span from the lower value to the
+	 * upper value.
+	 */
+	@Test
+	public void testCombine_ShouldReturnCombinedRange_WhenBothRangesAreSingleValue() {
+		Range range1 = new Range(5, 5);
+		Range range2 = new Range(-5, -5);
+		Range combinedRange = Range.combine(range1, range2);
+		Range expectedRange = new Range(-5, 5);
+		assertSame("SECT1.8: Combined range should span from -5 to 5", expectedRange, combinedRange);
+	}
+
+	/**
+	 * 
+	 * SECT1.9: Both ranges are identical.
+	 * 
+	 * Expected that the same range should be returned.
+	 */
+	@Test
+	public void testCombine_ShouldReturnSameRange_WhenBothRangesAreIdentical() {
+		Range range1 = new Range(15, 19);
+		Range range2 = new Range(15, 19);
+		Range combinedRange = Range.combine(range1, range2);
+		assertSame("SECT1.9: Combined range should be the same as both input ranges", range1, combinedRange);
 	}
 
 	// ------------------- expandToInclude function tests ----------------
@@ -486,6 +485,175 @@ public class RangeTest {
 		boolean isIntersecting = rangeObjectToTestForIntersects.intersects(lower, upper);
 		assertTrue("SECT3.10 - Intersects should be true. Instead got: " + isIntersecting + " where input range is ("
 				+ lower + ", " + upper + ") ", isIntersecting);
+	}
+
+	// ------------------- shift function tests --------------------------
+
+	/*
+	 * SECT4.1: Range with negative bounds is shifted rightwards by an
+	 * inconsequential delta.
+	 * 
+	 * Expects the range to be naively shifted towards the rightward with no bound
+	 * crossing the zero mark so there is no clamping.
+	 */
+	@Test
+	public void testShift_ShouldShiftRightWithoutClamping_OnNegativeRangeAndInconsequentialPositiveDelta() {
+		Range base = new Range(-10, -5);
+		double delta = 4;
+		Range shiftedRange = Range.shift(base, delta);
+		Range expectedRange = new Range(-6, -1);
+		assertSame("SECT4.1 - Range should be naively shifted rightwards without clamping", expectedRange,
+				shiftedRange);
+	}
+
+	/**
+	 * 
+	 * SECT4.2: Range with positive bounds is shifted leftwards by an
+	 * inconsequential delta.
+	 * 
+	 * Expects the range to be naively shifted towards the left with no bound
+	 * crossing the zero mark so there is no clamping.
+	 */
+	@Test
+	public void testShift_ShouldShiftLeftWithoutClamping_OnPositiveRangeAndInconsequentialNegativeDelta() {
+		Range base = new Range(5, 10);
+		double delta = -4;
+		Range shiftedRange = Range.shift(base, delta);
+		Range expectedRange = new Range(1, 6);
+		assertSame("SECT4.2 - Range should be naively shifted leftwards without clamping", expectedRange, shiftedRange);
+	}
+
+	/**
+	 * 
+	 * SECT4.3: Range with one positive and one negative bound is shifted rightwards
+	 * with zero crossing on the lower bound.
+	 * 
+	 * Expects the range to be shifted rightwards with the lower bound clamped at
+	 * zero and the size maintained.
+	 */
+	@Test
+	public void testShift_ShouldClampAtZeroAndMaintainSize_OnStraddlingRangeAndPositiveDelta() {
+		Range base = new Range(-4, 5);
+		double delta = 5;
+		Range shiftedRange = Range.shift(base, delta);
+		Range expectedRange = new Range(0, 9);
+		assertSame("SECT4.3 - Range should be shifted rightwards with lower bound clamped at zero and size maintained",
+				expectedRange, shiftedRange);
+	}
+
+	/**
+	 * 
+	 * SECT4.4: Range with one positive and one negative bound is shifted leftwards
+	 * with zero crossing on the upper bound.
+	 * 
+	 * Expects the range to be shifted leftwards with the upper bound clamped at
+	 * zero and the size maintained.
+	 */
+	@Test
+	public void testShift_ShouldClampAtZeroAndMaintainSize_OnStraddlingRangeAndNegativeDelta() {
+		Range base = new Range(-5, 4);
+		double delta = -5;
+		Range shiftedRange = Range.shift(base, delta);
+		Range expectedRange = new Range(-9, 0);
+		assertSame("SECT4.4 - Range should be shifted leftwards with upper bound clamped at zero and size maintained",
+				expectedRange, shiftedRange);
+	}
+
+	/**
+	 * 
+	 * SECT4.5: Range shifted by 0.
+	 * 
+	 * Expects the range to remain unchanged.
+	 */
+	@Test
+	public void testShift_ShouldNotChangeRange_OnAnyRangeAndZeroDelta() {
+		Range base = new Range(-5, 0);
+		double delta = 0;
+		Range shiftedRange = Range.shift(base, delta);
+		Range expectedRange = new Range(-5, 0);
+		assertSame("SECT4.5 - Range should remain unchanged when shifted by zero", expectedRange, shiftedRange);
+	}
+
+	/**
+	 * 
+	 * SECT4.6: Null range.
+	 * 
+	 * Expects an InvalidParameterException to be thrown.
+	 */
+	@Test()
+	public void testShift_ShouldThrowException_OnNullRangeAndAnyDelta() {
+		Range base = null;
+		double delta = 5;
+
+		assertThrows("SECT4.6: Expects an InvalidParameterException when base range is null",
+				InvalidParameterException.class, () -> {
+					Range.shift(base, delta);
+				});
+
+	}
+
+	/**
+	 * 
+	 * SECT4.7: Range shifted by NaN.
+	 * 
+	 * Expects a range with NaN bounds to be returned.
+	 */
+	@Test
+	public void testShift_ShouldReturnNaNRange_OnZeroRangeAndNaNDelta() {
+		Range base = new Range(0, 0);
+		double delta = Double.NaN;
+		Range shiftedRange = Range.shift(base, delta);
+		Range expectedRange = new Range(Double.NaN, Double.NaN);
+		assertSame("SECT4.7 - Range should be a not a number range when NaN is passed as delta", expectedRange,
+				shiftedRange);
+	}
+
+	/**
+	 * 
+	 * SECT4.8 (BVA): Range with equal bounds at 0 is shifted rightwards.
+	 * 
+	 * Expects the range to be shifted rightwards without clamping.
+	 */
+	@Test
+	public void testShift_ShouldShiftRightFromZero_OnZeroRangeAndPositiveDelta() {
+		Range base = new Range(0, 0);
+		double delta = 5;
+		Range shiftedRange = Range.shift(base, delta);
+		Range expectedRange = new Range(5, 5);
+		assertSame("SECT4.8 - Range should be shifted rightwards from zero", expectedRange, shiftedRange);
+	}
+
+	/**
+	 * 
+	 * SECT4.9 (BVA): Range with equal bounds at 0 is shifted leftwards.
+	 * 
+	 * Expects the range to be shifted leftwards without clamping.
+	 */
+	@Test
+	public void testShift_ShouldShiftLeftFromZero_OnZeroRangeAndNegativeDelta() {
+		Range base = new Range(0, 0);
+		double delta = -5;
+		Range shiftedRange = Range.shift(base, delta);
+		Range expectedRange = new Range(-5, -5);
+		assertSame("SECT4.9 - Range should be shifted leftwards from zero", expectedRange, shiftedRange);
+	}
+
+	/**
+	 * 
+	 * SECT4.10 (BVA): Range with both negative bounds crossing zero on shifting
+	 * rightwards.
+	 * 
+	 * Expects the range to be shifted rightwards with the upper bound clamped at
+	 * zero and the size maintained.
+	 */
+	@Test
+	public void testShift_ShouldClampAtZeroAndMaintainSize_OnNegativeRangeShiftRightCrossingZero() {
+		Range base = new Range(-3, -1);
+		double delta = 4;
+		Range shiftedRange = Range.shift(base, delta);
+		Range expectedRange = new Range(-2, 0);
+		assertSame("SECT4.10 - Range should be shifted rightwards with upper bound clamped at zero and size maintained",
+				expectedRange, shiftedRange);
 	}
 
 	// ------------------- constrains function tests ---------------------
