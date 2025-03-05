@@ -25,6 +25,9 @@ public class RangeTest {
 
 	@After
 	public void tearDown() throws Exception {
+		rangeObjectUnderTest = null;
+		rangeObjectToTestForIntersects = null;
+		rangeObjectToTestForConstrain = null;
 	}
 
 	@Ignore
