@@ -95,7 +95,7 @@ public class RangeTest {
 		Range range2 = new Range(5, 10);
 		Range combinedRange = Range.combine(range1, range2);
 		Range expectedRange = new Range(5, 15);
-		assertSame("SECT1.4: Combined range should span from 5 to 15", expectedRange, combinedRange);
+		assertEquals("SECT1.4: Combined range should span from 5 to 15", expectedRange, combinedRange);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class RangeTest {
 		Range range2 = new Range(4, 10);
 		Range combinedRange = Range.combine(range1, range2);
 		Range expectedRange = new Range(4, 20);
-		assertSame("SECT1.5: Combined range should span from 4 to 20", expectedRange, combinedRange);
+		assertEquals("SECT1.5: Combined range should span from 4 to 20", expectedRange, combinedRange);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class RangeTest {
 		Range range1 = new Range(6, 6);
 		Range range2 = new Range(5, 7);
 		Range combinedRange = Range.combine(range1, range2);
-		assertSame("SECT1.6: Combined range should be the second range", range2, combinedRange);
+		assertEquals("SECT1.6: Combined range should be the second range", range2, combinedRange);
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class RangeTest {
 		Range range2 = new Range(-6, 2);
 		Range combinedRange = Range.combine(range1, range2);
 		Range expectedRange = new Range(-6, 4);
-		assertSame("SECT1.7: Combined range should span from -4 to 2", expectedRange, combinedRange);
+		assertEquals("SECT1.7: Combined range should span from -6 to 4", expectedRange, combinedRange);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class RangeTest {
 		Range range2 = new Range(-5, -5);
 		Range combinedRange = Range.combine(range1, range2);
 		Range expectedRange = new Range(-5, 5);
-		assertSame("SECT1.8: Combined range should span from -5 to 5", expectedRange, combinedRange);
+		assertEquals("SECT1.8: Combined range should span from -5 to 5", expectedRange, combinedRange);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class RangeTest {
 		Range range1 = new Range(15, 19);
 		Range range2 = new Range(15, 19);
 		Range combinedRange = Range.combine(range1, range2);
-		assertSame("SECT1.9: Combined range should be the same as both input ranges", range1, combinedRange);
+		assertEquals("SECT1.9: Combined range should be the same as both input ranges", range1, combinedRange);
 	}
 
 	// ------------------- expandToInclude function tests ----------------
@@ -187,7 +187,7 @@ public class RangeTest {
 		double value = -4;
 		Range expandedRange = Range.expandToInclude(range, value);
 		Range expectedRange = new Range(-4, 5);
-		assertSame("SECT2.1 - The value should be at the lower bound of the range but is not", expectedRange,
+		assertEquals("SECT2.1 - The value should be at the lower bound of the range but is not", expectedRange,
 				expandedRange);
 
 	}
@@ -204,7 +204,7 @@ public class RangeTest {
 		double value = 0;
 		Range expandedRange = Range.expandToInclude(range, value);
 		Range expectedRange = new Range(-3, 5);
-		assertSame("SECT2.2 - The range should remain unchanged but it did not", expectedRange, expandedRange);
+		assertEquals("SECT2.2 - The range should remain unchanged but it did not", expectedRange, expandedRange);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class RangeTest {
 		double value = 7;
 		Range expandedRange = Range.expandToInclude(range, value);
 		Range expectedRange = new Range(-3, 7);
-		assertSame("SECT2.3 - The value should be at the upper bound of the range but is not", expectedRange,
+		assertEquals("SECT2.3 - The value should be at the upper bound of the range but is not", expectedRange,
 				expandedRange);
 	}
 
@@ -235,7 +235,7 @@ public class RangeTest {
 		double value = Double.NaN;
 		Range expandedRange = Range.expandToInclude(range, value);
 		Range expectedRange = new Range(5, 5);
-		assertSame("SECT2.4 - The range should remain unchanged when value is NaN but it did not", expectedRange,
+		assertEquals("SECT2.4 - The range should remain unchanged when value is NaN but it did not", expectedRange,
 				expandedRange);
 	}
 
@@ -268,7 +268,7 @@ public class RangeTest {
 		double value = 3;
 		Range expandedRange = Range.expandToInclude(range, value);
 		Range expectedRange = new Range(3, 5);
-		assertSame("SECT2.6 - The range should remain unchanged when value is at lower bound but it did not",
+		assertEquals("SECT2.6 - The range should remain unchanged when value is at lower bound but it did not",
 				expectedRange, expandedRange);
 	}
 
@@ -284,7 +284,7 @@ public class RangeTest {
 		double value = 5;
 		Range expandedRange = Range.expandToInclude(range, value);
 		Range expectedRange = new Range(3, 5);
-		assertSame("SECT2.7 - The range should remain unchanged when value is at upper bound but it did not",
+		assertEquals("SECT2.7 - The range should remain unchanged when value is at upper bound but it did not",
 				expectedRange, expandedRange);
 	}
 
@@ -300,7 +300,7 @@ public class RangeTest {
 		double value = -3.000001;
 		Range expandedRange = Range.expandToInclude(range, value);
 		Range expectedRange = new Range(-3.000001, 5);
-		assertSame("SECT2.8 - The range should expand to include the value at the lower bound but it did not",
+		assertEquals("SECT2.8 - The range should expand to include the value at the lower bound but it did not",
 				expectedRange, expandedRange);
 	}
 
@@ -316,7 +316,7 @@ public class RangeTest {
 		double value = 5.000001;
 		Range expandedRange = Range.expandToInclude(range, value);
 		Range expectedRange = new Range(-3, 5.000001);
-		assertSame("SECT2.9 - The range should expand to include the value at the upper bound but it did not",
+		assertEquals("SECT2.9 - The range should expand to include the value at the upper bound but it did not",
 				expectedRange, expandedRange);
 	}
 
@@ -332,7 +332,7 @@ public class RangeTest {
 		double value = 5;
 		Range expandedRange = Range.expandToInclude(range, value);
 		Range expectedRange = new Range(5, 5);
-		assertSame("SECT2.10 - The range should remain unchanged when value is within equal range but it did not",
+		assertEquals("SECT2.10 - The range should remain unchanged when value is within equal range but it did not",
 				expectedRange, expandedRange);
 	}
 
@@ -505,7 +505,7 @@ public class RangeTest {
 		double delta = 4;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(-6, -1);
-		assertSame("SECT4.1 - Range should be naively shifted rightwards without clamping", expectedRange,
+		assertEquals("SECT4.1 - Range should be naively shifted rightwards without clamping", expectedRange,
 				shiftedRange);
 	}
 
@@ -523,7 +523,7 @@ public class RangeTest {
 		double delta = -4;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(1, 6);
-		assertSame("SECT4.2 - Range should be naively shifted leftwards without clamping", expectedRange, shiftedRange);
+		assertEquals("SECT4.2 - Range should be naively shifted leftwards without clamping", expectedRange, shiftedRange);
 	}
 
 	/**
@@ -540,7 +540,7 @@ public class RangeTest {
 		double delta = 5;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(0, 9);
-		assertSame("SECT4.3 - Range should be shifted rightwards with lower bound clamped at zero and size maintained",
+		assertEquals("SECT4.3 - Range should be shifted rightwards with lower bound clamped at zero and size maintained",
 				expectedRange, shiftedRange);
 	}
 
@@ -558,7 +558,7 @@ public class RangeTest {
 		double delta = -5;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(-9, 0);
-		assertSame("SECT4.4 - Range should be shifted leftwards with upper bound clamped at zero and size maintained",
+		assertEquals("SECT4.4 - Range should be shifted leftwards with upper bound clamped at zero and size maintained",
 				expectedRange, shiftedRange);
 	}
 
@@ -574,7 +574,7 @@ public class RangeTest {
 		double delta = 0;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(-5, 0);
-		assertSame("SECT4.5 - Range should remain unchanged when shifted by zero", expectedRange, shiftedRange);
+		assertEquals("SECT4.5 - Range should remain unchanged when shifted by zero", expectedRange, shiftedRange);
 	}
 
 	/**
@@ -607,7 +607,7 @@ public class RangeTest {
 		double delta = Double.NaN;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(Double.NaN, Double.NaN);
-		assertSame("SECT4.7 - Range should be a not a number range when NaN is passed as delta", expectedRange,
+		assertEquals("SECT4.7 - Range should be a not a number range when NaN is passed as delta", expectedRange,
 				shiftedRange);
 	}
 
@@ -623,7 +623,7 @@ public class RangeTest {
 		double delta = 5;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(5, 5);
-		assertSame("SECT4.8 - Range should be shifted rightwards from zero", expectedRange, shiftedRange);
+		assertEquals("SECT4.8 - Range should be shifted rightwards from zero", expectedRange, shiftedRange);
 	}
 
 	/**
@@ -638,7 +638,7 @@ public class RangeTest {
 		double delta = -5;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(-5, -5);
-		assertSame("SECT4.9 - Range should be shifted leftwards from zero", expectedRange, shiftedRange);
+		assertEquals("SECT4.9 - Range should be shifted leftwards from zero", expectedRange, shiftedRange);
 	}
 
 	/**
@@ -655,7 +655,7 @@ public class RangeTest {
 		double delta = 4;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(-2, 0);
-		assertSame("SECT4.10 - Range should be shifted rightwards with upper bound clamped at zero and size maintained",
+		assertEquals("SECT4.10 - Range should be shifted rightwards with upper bound clamped at zero and size maintained",
 				expectedRange, shiftedRange);
 	}
 
