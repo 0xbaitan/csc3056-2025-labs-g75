@@ -259,6 +259,17 @@ public class DataUtilitiesTest {
 		Number[][] result = DataUtilities.createNumberArray2D(negativeArray);
 		assertArrayEquals("Negative numbers not correctly converted", new Number[][] {{-1.0,-3.0}, {-5.0,-7.0}}, result);
 	}
+	
+	
+	@Test
+	public void testGetCumulativePercentages() {
+		DefaultKeyedValues keyValues = new DefaultKeyedValues();
+		keyValues.addValue((Comparable<Double>) 0.0, 6.0);
+		keyValues.addValue((Comparable<Double>) 1.0, 11.0);
+		keyValues.addValue((Comparable<Double>) 2.0, 3.0);
+		KeyedValues objectUnderTest = DataUtilities.getCumulativePercentages(keyValues);
+		assertEquals((double) objectUnderTest.getValue(2), 1.0,  .000000001d);
+	}
 
 	@Test
 	public void testCreateNumberArray2D_shouldBeCorrect_On2DArrayWithMixedValues() {
