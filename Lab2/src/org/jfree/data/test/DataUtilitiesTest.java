@@ -148,12 +148,17 @@ public class DataUtilitiesTest {
 		});
 
 	}
+	
+	// -------------------------------------- calculateRowTotal functions -----------------------------------
 
-	// TC2
-
+	/**
+	 * 
+	 * TC2.1: Valid row index.
+	 * 
+	 */
 	@Test
 	public void testCalculateRowTotal_ShouldBeCorrect_OnValidRow() {
-		assertEquals("Wrong sum returned. It Should be: 3.0", 3.0, DataUtilities.calculateRowTotal(values2D, 0),
+		assertEquals("TC2.1 - Wrong sum returned. It Should be: 3.0", 3.0, DataUtilities.calculateRowTotal(values2D, 0),
 				0.0000001);
 	}
 
