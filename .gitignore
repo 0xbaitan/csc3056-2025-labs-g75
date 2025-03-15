@@ -5,4 +5,14 @@
 **/.project
 **/.classpath
 **/module-info.java
+**/lib
+**/org/
+!**/org/**/RangeTest.java
+!**/org/**/DataUtilitiesTest.java
+ChangeLog
+CHANGELOG.txt
+licence-LGPL.txt
+README.txt
+overview.html
+
 jar/
