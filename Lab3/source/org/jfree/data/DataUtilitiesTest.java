@@ -80,7 +80,7 @@ public class DataUtilitiesTest {
 		values2D = testValues;
 		assertEquals("TC1.3 - Expected sum of zero", 0, DataUtilities.calculateColumnTotal(values2D, 0), 0.0000001);
 	}
-	
+
 	/**
 	 * 
 	 * TC1.4: Column contains negative values.
@@ -114,7 +114,7 @@ public class DataUtilitiesTest {
 		values2D = testValues;
 		assertEquals("TC1.5 - Wrong sum returned", 2, DataUtilities.calculateColumnTotal(values2D, 1), 0.000001);
 	}
-	
+
 	/**
 	 * 
 	 * TC1.6: Empty data.
@@ -125,11 +125,10 @@ public class DataUtilitiesTest {
 	public void testCalculateColumnTotal_ShouldBeZero_OnEmptyValues2D() {
 		DefaultKeyedValues2D emptyValues = new DefaultKeyedValues2D();
 		values2D = emptyValues;
-		assertEquals("TC1.6 - Expected sum of zero for empty dataset", 0, DataUtilities.calculateColumnTotal(values2D, 0),
-				0.0000001);
+		assertEquals("TC1.6 - Expected sum of zero for empty dataset", 0,
+				DataUtilities.calculateColumnTotal(values2D, 0), 0.0000001);
 	}
 
-	
 	/**
 	 * 
 	 * TC1.7: Data is null.
@@ -143,8 +142,27 @@ public class DataUtilitiesTest {
 		});
 
 	}
-	
-	// -------------------------------------- calculateRowTotal functions -----------------------------------
+
+	@Test
+	public void testCalculateColumnTotal_ShouldReturnZero_OnEmptyDataAndAnyIntColumnIndex() {
+		Values2D values = new DefaultKeyedValues2D();
+		int column = 0;
+		double total = DataUtilities.calculateColumnTotal(values, column);
+		assertEquals("WBT-1", 0, total, 1e-6);
+	}
+
+	@Test
+	public void testCalculateColumnTotal_ShouldReturnCorrectTotal_OnDataWithNullElementAndValidColumnIndex() {
+		DefaultKeyedValues2D values = new DefaultKeyedValues2D();
+		values.setValue(1, 0, 0);
+		values.setValue(null, 1, 0);
+		values.setValue(-1, 2, 0);
+		double total = DataUtilities.calculateColumnTotal(values, 0);
+		assertEquals("WBT-2", 0, total, 1e-6);
+	}
+
+	// -------------------------------------- calculateRowTotal functions
+	// -----------------------------------
 
 	/**
 	 * 
@@ -426,6 +444,20 @@ public class DataUtilitiesTest {
 		KeyedValues result = DataUtilities.getCumulativePercentages(infinityValues);
 		assertNotEquals("Infinity values Should not be converted directly", Double.POSITIVE_INFINITY,
 				result.getValue("A").doubleValue());
+	}
+
+	@Test
+	public void testGetCumulativePercentages_ShouldIgnoreNull_OnDataContainingANullValue() {
+		DefaultKeyedValues values = new DefaultKeyedValues();
+		values.setValue((Comparable<Integer>) 0, 1);
+		values.setValue((Comparable<Integer>) 1, null);
+		values.setValue((Comparable<Integer>) 2, 3);
+		DefaultKeyedValues cumulativePercentages = new DefaultKeyedValues();
+		cumulativePercentages.setValue((Comparable<Integer>) 0, 1 / 4.0);
+		cumulativePercentages.setValue((Comparable<Integer>) 1, null);
+		cumulativePercentages.setValue((Comparable<Integer>) 2, (1 + 3) / 4.0);
+		KeyedValues actualCumulativePercentages = DataUtilities.getCumulativePercentages(values);
+		assertEquals("WBT-3", (KeyedValues) cumulativePercentages, actualCumulativePercentages);
 	}
 
 }
