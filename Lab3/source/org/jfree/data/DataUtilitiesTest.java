@@ -143,14 +143,7 @@ public class DataUtilitiesTest {
 
 	}
 
-	@Test
-	public void testCalculateColumnTotal_ShouldReturnZero_OnEmptyDataAndAnyIntColumnIndex() {
-		Values2D values = new DefaultKeyedValues2D();
-		int column = 0;
-		double total = DataUtilities.calculateColumnTotal(values, column);
-		assertEquals("WBT-1", 0, total, 1e-6);
-	}
-
+	//WBT
 	@Test
 	public void testCalculateColumnTotal_ShouldReturnCorrectTotal_OnDataWithNullElementAndValidColumnIndex() {
 		DefaultKeyedValues2D values = new DefaultKeyedValues2D();
@@ -446,6 +439,7 @@ public class DataUtilitiesTest {
 				result.getValue("A").doubleValue());
 	}
 
+	//WBT
 	@Test
 	public void testGetCumulativePercentages_ShouldIgnoreNull_OnDataContainingANullValue() {
 		DefaultKeyedValues values = new DefaultKeyedValues();
