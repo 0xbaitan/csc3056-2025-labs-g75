@@ -791,5 +791,50 @@ public class RangeTest {
 		assertEquals("SECT5.10 - Upper bound (5) to be returned but instead got: " + constrainedValue, 5,
 				constrainedValue, 1e-6);
 	}
+	
+	
+	// ------------------------------ White Box Testing -----------------------------------------
+	
+	@Test
+	public void testRangeConstructor_ShouldThrowException_OnLowerBoundExceedingUpperBound() {
+		double lowerBound = 10;
+		double upperBound = 5; 
+		// upperBound exceeds lowerBound
+		assertThrows("WBT-R-1.1: IllegalArgumentException expected but not thrown", IllegalArgumentException.class, () -> {
+			Range illegalRange = new Range (lowerBound , upperBound);
+			System.out.println(illegalRange);	
+		});
+	}
 
+	@Test
+	public void testShift_ShouldReturnCorrectShiftedRange_OnAllowZeroCrossingIsTrue() {
+		Range base = new Range(-5, -3);
+		double delta = 10;
+		boolean allowZeroCrossing = true;
+		Range expectedRange = new Range (5, 7);
+		Range actualRange = Range.shift(base, delta, allowZeroCrossing);
+		assertEquals("WBT-R-2.1: Expected the correct range to be returned on allow zero crossing", expectedRange, actualRange);
+	}
+	
+	@Test 
+	public void testExpand_ShouldReturnNullOrCorrectRange_OnNullRange() {
+	// one null one not null 
+		Range base = new Range(5,10);
+		assertEquals("WBT-R-3.1: Expected correct range after expansion", 
+				new Range(4, 11.5), Range.expand(base, 0.2, 0.3));
+		
+		assertThrows("WBT-R-3.2: IllegalArgumentException expected for null range", 
+				IllegalArgumentException.class, () -> Range.expand(null, 1, 2));
+	}
+	
+	@Test 
+	public void testCentralValue() {
+		Range range1 = new Range(2, 6);
+		Range range2 = new Range(-8, -2);
+		Range range3 = new Range(-4, 4);
+		
+		assertEquals("WBT-R-4.1: Expected central value mismatch", 4.0, range1.getCentralValue(), 0.0001);
+		assertEquals("WBT-R-4.2: Expected central value mismatch", -5.0, range2.getCentralValue(), 0.0001);
+		assertEquals("WBT-R-4.3: Expected central value mismatch", 0.0, range3.getCentralValue(), 0.0001);
+	}
 }
