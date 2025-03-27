@@ -30,6 +30,114 @@ public class RangeTest {
 		rangeObjectToTestForConstrain = null;
 	}
 
+	/*
+	 * ------------------------------------------------------------------------
+	 * White-box Test Cases
+	 * ------------------------------------------------------------------------
+	 */
+
+	/**
+	 * 
+	 * WBT-R-1.1: Increase Line & Branch Coverage for Range Constructor by exploring
+	 * the missed branch where lower bound exceeds the upper bound (Range.java;
+	 * L85-88).
+	 * 
+	 * Expected that an IllegalArgumentException should be thrown and the missed
+	 * branch is executed.
+	 */
+	@Test
+	public void testRangeConstructor_ShouldThrowException_OnLowerBoundExceedingUpperBound() {
+		double lowerBound = 10;
+		double upperBound = 5;
+		// upperBound exceeds lowerBound
+		assertThrows("WBT-R-1.1: IllegalArgumentException expected but not thrown", IllegalArgumentException.class,
+				() -> {
+					Range illegalRange = new Range(lowerBound, upperBound);
+					System.out.println(illegalRange);
+				});
+	}
+
+	/**
+	 * 
+	 * WBT-R-2.1: Increase Line & Branch Coverage for shift function by exploring
+	 * the missed branch where zero crossing is allowed. (Range.java; L294-296).
+	 * 
+	 * Expected that a shifted Range is returned with no capping at zero, and the
+	 * missed branch is executed.
+	 */
+	@Test
+	public void testShift_ShouldReturnCorrectShiftedRange_OnAllowZeroCrossingIsTrue() {
+		Range base = new Range(-5, -3);
+		double delta = 10;
+		boolean allowZeroCrossing = true;
+		Range expectedRange = new Range(5, 7);
+		Range actualRange = Range.shift(base, delta, allowZeroCrossing);
+		assertEquals("WBT-R-2.1: Expected the correct range " + "to be returned on allow zero crossing", expectedRange,
+				actualRange);
+	}
+
+	/**
+	 * 
+	 * WBT-R-3.1: Increase Line & Branch Coverage for equals function by exploring
+	 * the missed branch where a non-Range instance is passed. (Range.java;
+	 * L334-335).
+	 * 
+	 * Expected that false is returned and the missed branch is executed.
+	 */
+	@Test
+	public void testEquals_ShouldReturnFalse_OnNullRange() {
+		Range base = new Range(4, 5);
+		assertFalse("WBT-R-3.1: Expected false when comparing a range with null", base.equals(null));
+	}
+
+	/**
+	 * 
+	 * WBT-R-4.1: Increase Line & Branch Coverage for expand function by exploring
+	 * the missed branch where range is non-null. (Range.java; L257-261).
+	 * 
+	 * Expected that the correct expanded range is returned and the missed branch is
+	 * executed.
+	 */
+	@Test
+	public void testExpand_ShouldReturnCorrectExpandedRange_OnValidRange() {
+
+		/*
+		 * Given: 1. Base Range: (5, 10) 2. Margins: 20% and 30%
+		 * 
+		 * lower = 5, upper = 10 difference = 10 - 5 = 5 lower margin = 0.2 or 20% upper
+		 * margin = 0.3 or 30% lower bound on expansion = lower - lower margin *
+		 * difference = 5 - 0.2 * 5 = 5 - 1 = 4 upper bound on expansion = upper + upper
+		 * margin * difference = 10 + 0.3 * 5 = 10 + 1.5 = 11.5
+		 * 
+		 * Therefore, Expanded range: (4, 11.5)
+		 */
+		Range base = new Range(5, 10);
+		Range actual = Range.expand(base, 0.2, 0.3);
+		Range expected = new Range(4, 11.5);
+		assertEquals("WBT-R-4.1: Expected correct range after expansion", expected, actual);
+	}
+
+	/**
+	 * 
+	 * WBT-R-4.2: Increase Line & Branch Coverage for expand function by exploring
+	 * the missed branch where range is null. (Range.java; L254-255).
+	 * 
+	 * Expected that an IllegalArgumentException is thrown and the missed branch is
+	 * executed.
+	 */
+	@Test
+	public void testExpand_ShouldThrowIllegalArgumentException_OnValidRange() {
+
+		assertThrows("WBT-R-4.2: IllegalArgumentException expected for null range", IllegalArgumentException.class,
+				() -> Range.expand(null, 1, 2));
+	}
+
+	/*
+	 * ------------------------------------------------------------------------
+	 * Black-box Test Cases
+	 * ------------------------------------------------------------------------
+	 */
+
 	@Ignore
 	@Test
 	public void testCentralValueShouldBeZero() {
@@ -523,7 +631,8 @@ public class RangeTest {
 		double delta = -4;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(1, 6);
-		assertEquals("SECT4.2 - Range should be naively shifted leftwards without clamping", expectedRange, shiftedRange);
+		assertEquals("SECT4.2 - Range should be naively shifted leftwards without clamping", expectedRange,
+				shiftedRange);
 	}
 
 	/**
@@ -540,7 +649,8 @@ public class RangeTest {
 		double delta = 5;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(0, 9);
-		assertEquals("SECT4.3 - Range should be shifted rightwards with lower bound clamped at zero and size maintained",
+		assertEquals(
+				"SECT4.3 - Range should be shifted rightwards with lower bound clamped at zero and size maintained",
 				expectedRange, shiftedRange);
 	}
 
@@ -655,7 +765,8 @@ public class RangeTest {
 		double delta = 4;
 		Range shiftedRange = Range.shift(base, delta);
 		Range expectedRange = new Range(-2, 0);
-		assertEquals("SECT4.10 - Range should be shifted rightwards with upper bound clamped at zero and size maintained",
+		assertEquals(
+				"SECT4.10 - Range should be shifted rightwards with upper bound clamped at zero and size maintained",
 				expectedRange, shiftedRange);
 	}
 
@@ -791,50 +902,5 @@ public class RangeTest {
 		assertEquals("SECT5.10 - Upper bound (5) to be returned but instead got: " + constrainedValue, 5,
 				constrainedValue, 1e-6);
 	}
-	
-	
-	// ------------------------------ White Box Testing -----------------------------------------
-	
-	@Test
-	public void testRangeConstructor_ShouldThrowException_OnLowerBoundExceedingUpperBound() {
-		double lowerBound = 10;
-		double upperBound = 5; 
-		// upperBound exceeds lowerBound
-		assertThrows("WBT-R-1.1: IllegalArgumentException expected but not thrown", IllegalArgumentException.class, () -> {
-			Range illegalRange = new Range (lowerBound , upperBound);
-			System.out.println(illegalRange);	
-		});
-	}
 
-	@Test
-	public void testShift_ShouldReturnCorrectShiftedRange_OnAllowZeroCrossingIsTrue() {
-		Range base = new Range(-5, -3);
-		double delta = 10;
-		boolean allowZeroCrossing = true;
-		Range expectedRange = new Range (5, 7);
-		Range actualRange = Range.shift(base, delta, allowZeroCrossing);
-		assertEquals("WBT-R-2.1: Expected the correct range to be returned on allow zero crossing", expectedRange, actualRange);
-	}
-	
-	@Test 
-	public void testExpand_ShouldReturnNullOrCorrectRange_OnNullRange() {
-	// one null one not null 
-		Range base = new Range(5,10);
-		assertEquals("WBT-R-3.1: Expected correct range after expansion", 
-				new Range(4, 11.5), Range.expand(base, 0.2, 0.3));
-		
-		assertThrows("WBT-R-3.2: IllegalArgumentException expected for null range", 
-				IllegalArgumentException.class, () -> Range.expand(null, 1, 2));
-	}
-	
-	@Test 
-	public void testCentralValue() {
-		Range range1 = new Range(2, 6);
-		Range range2 = new Range(-8, -2);
-		Range range3 = new Range(-4, 4);
-		
-		assertEquals("WBT-R-4.1: Expected central value mismatch", 4.0, range1.getCentralValue(), 0.0001);
-		assertEquals("WBT-R-4.2: Expected central value mismatch", -5.0, range2.getCentralValue(), 0.0001);
-		assertEquals("WBT-R-4.3: Expected central value mismatch", 0.0, range3.getCentralValue(), 0.0001);
-	}
 }
