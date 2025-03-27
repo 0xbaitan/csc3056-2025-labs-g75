@@ -42,6 +42,67 @@ public class DataUtilitiesTest {
 		testKeyedValues = null;
 	}
 
+	/*
+	 * ------------------------------------------------------------------------
+	 * White-box Test Cases
+	 * ------------------------------------------------------------------------
+	 */
+
+	/**
+	 * 
+	 * WBT-D-1.1: Increase Line & Branch Coverage for getCumulativePercentages
+	 * function by exploring the missed branches where the values could have 
+	 * a null element (DataUtilities.java; 
+	 * implicit else clauses that follows after L171-172 & L178-179).
+	 * 
+	 * Expected that the null element is to be ignored with the correct result 
+	 * returned. Should also execute missed branches.
+	 */
+	@Test
+	public void testGetCumulativePercentages_ShouldIgnoreNull_OnDataWithNullElement() {
+		DefaultKeyedValues values = new DefaultKeyedValues();
+		values.setValue((Comparable<Integer>) 0, 1);
+		values.setValue((Comparable<Integer>) 1, null);
+		values.setValue((Comparable<Integer>) 2, 3);
+		DefaultKeyedValues cumulativePercentages = new DefaultKeyedValues();
+		cumulativePercentages.setValue((Comparable<Integer>) 0, 1 / 4.0);
+		cumulativePercentages.setValue((Comparable<Integer>) 1, null);
+		cumulativePercentages.setValue((Comparable<Integer>) 2, (1 + 3) / 4.0);
+		KeyedValues actualCumulativePercentages = 
+				DataUtilities.getCumulativePercentages(values);
+		assertEquals("WBT-D-1.1: Should ignore null, "
+				+ "and return the cumulative percentages but did not", 
+				(KeyedValues) cumulativePercentages, actualCumulativePercentages);
+	}
+
+	/**
+	 * 
+	 * WBT-D-2.1: Increase Line & Branch Coverage for caclulateColumnTotal
+	 * function by exploring the missed branch where the values could have 
+	 * a null element (DataUtilities.java; 
+	 * implicit else clause that follows after L70-71).
+	 * 
+	 * Expected that the null element is to be ignored with the correct result 
+	 * returned. Should also execute the missed branch.
+	 */
+	@Test
+	public void testCalculateColumnTotal_ShouldIgnoreNull_OnDataWithNullElement() {
+		DefaultKeyedValues2D values = new DefaultKeyedValues2D();
+		values.setValue(1, 0, 0);
+		values.setValue(null, 1, 0);
+		values.setValue(-1, 2, 0);
+		double total = DataUtilities.calculateColumnTotal(values, 0);
+		assertEquals("WBT-D-2.1: Should ingore null, "
+				+ "and return the calculated column total but did not", 
+				0, total, 1e-6);
+	}
+
+	/*
+	 * ------------------------------------------------------------------------
+	 * Black-box Test Cases
+	 * ------------------------------------------------------------------------
+	 */
+
 	/**
 	 * 
 	 * TC1.1: A valid result should be returned on summing the columns.
@@ -143,19 +204,7 @@ public class DataUtilitiesTest {
 
 	}
 
-	//WBT
-	@Test
-	public void testCalculateColumnTotal_ShouldReturnCorrectTotal_OnDataWithNullElementAndValidColumnIndex() {
-		DefaultKeyedValues2D values = new DefaultKeyedValues2D();
-		values.setValue(1, 0, 0);
-		values.setValue(null, 1, 0);
-		values.setValue(-1, 2, 0);
-		double total = DataUtilities.calculateColumnTotal(values, 0);
-		assertEquals("WBT-2", 0, total, 1e-6);
-	}
-
-	// -------------------------------------- calculateRowTotal functions
-	// -----------------------------------
+	// ---------- calculateRowTotal functions ----------------
 
 	/**
 	 * 
@@ -437,21 +486,6 @@ public class DataUtilitiesTest {
 		KeyedValues result = DataUtilities.getCumulativePercentages(infinityValues);
 		assertNotEquals("Infinity values Should not be converted directly", Double.POSITIVE_INFINITY,
 				result.getValue("A").doubleValue());
-	}
-
-	//WBT
-	@Test
-	public void testGetCumulativePercentages_ShouldIgnoreNull_OnDataContainingANullValue() {
-		DefaultKeyedValues values = new DefaultKeyedValues();
-		values.setValue((Comparable<Integer>) 0, 1);
-		values.setValue((Comparable<Integer>) 1, null);
-		values.setValue((Comparable<Integer>) 2, 3);
-		DefaultKeyedValues cumulativePercentages = new DefaultKeyedValues();
-		cumulativePercentages.setValue((Comparable<Integer>) 0, 1 / 4.0);
-		cumulativePercentages.setValue((Comparable<Integer>) 1, null);
-		cumulativePercentages.setValue((Comparable<Integer>) 2, (1 + 3) / 4.0);
-		KeyedValues actualCumulativePercentages = DataUtilities.getCumulativePercentages(values);
-		assertEquals("WBT-3", (KeyedValues) cumulativePercentages, actualCumulativePercentages);
 	}
 
 }
